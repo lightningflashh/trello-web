@@ -1,5 +1,5 @@
-import Box from '@mui/material/Box'
-import ModeSelect from '../../components/ModeSelect'
+import { Box } from '@mui/material'
+import ModeSelect from '~/components/ModeSelect'
 
 const AppBar = () => {
   return (
