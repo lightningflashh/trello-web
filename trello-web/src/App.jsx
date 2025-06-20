@@ -1,6 +1,6 @@
-import { Box, useColorScheme } from '@mui/material'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
+import {useColorScheme} from '@mui/material'
+import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -53,14 +53,31 @@ function ModeSelect() {
 function App() {
   return (
     <>
-      <ModeSelect />
-      <div>
-        <h1>Click me!</h1>
-      </div>
-      <Button variant="contained">Hello world</Button>
-      <Typography variant="body2" color="text.secondary">
-        Hello world
-      </Typography>
+      <Container disableGutters maxWidth={false} sx={{ height: '100vh'}}>
+        <Box sx={{
+          backgroundColor: 'primary.light',
+          width: '100%',
+          height: (theme) => theme.trello.appBarHeight,
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+          <ModeSelect />
+        </Box>
+        <Box sx={{
+          backgroundColor: 'primary.dark',
+          width: '100%',
+          height: (theme) => theme.trello.boardBarHeight,
+          display: 'flex',
+          alignItems: 'center'
+        }}>Board bar</Box>
+        <Box sx={{
+          backgroundColor: 'primary.main',
+          width: '100%',
+          height: (theme) => `calc(100vh - ${theme.trello.appBarHeight} - ${theme.trello.boardBarHeight})`,
+          display: 'flex',
+          alignItems: 'center'
+        }}>Content</Box>
+      </Container>
     </>
   )
 }
