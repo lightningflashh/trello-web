@@ -3,7 +3,7 @@ import { red } from '@mui/material/colors'
 
 const theme = extendTheme({
   trello: {
-    appBarHeight: '48px',
+    appBarHeight: '58px',
     boardBarHeight: '58px'
   },
   colorSchemes: {
@@ -39,6 +39,58 @@ const theme = extendTheme({
           default: '#121212',
           paper: '#1e1e1e'
         }
+      }
+    }
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          '*::webkit-scrollbar': {
+            width: '8px',
+            height: '8px'
+          },
+          '*::webkit-scrollbar-thumb': {
+            backgroundColor: '#bdc3c7',
+            borderRadius: '8px'
+          },
+          '*::webkit-scrollbar-thumb::hover': {
+            backgroundColor: '#bdc3c7',
+            borderRadius: '8px'
+          }
+        }
+      }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none'
+        }
+      }
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem'
+        })
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem',
+          '.MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.light
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main
+          },
+          '& fieldset': {
+            borderWidth: '1px !important'
+          }
+        })
       }
     }
   }
