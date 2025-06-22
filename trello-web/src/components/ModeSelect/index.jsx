@@ -3,7 +3,7 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
-import { Box } from '@mui/material'
+import Box from '@mui/material/Box'
 
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined'
@@ -17,7 +17,7 @@ const ModeSelect = () => {
   }
 
   return (
-    <FormControl size="small">
+    <FormControl size="small" sx={{ minWidth: '120px' }}>
       <InputLabel id="label-select-dark-light-mode">Mode</InputLabel>
       <Select
         labelId="label-select-dark-light-mode"

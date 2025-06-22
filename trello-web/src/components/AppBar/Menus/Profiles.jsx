@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Box } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
 import ListItemIcon from '@mui/material/ListItemIcon'
+import Box from '@mui/material/Box'
+
 import IconButton from '@mui/material/IconButton'
 import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
@@ -35,7 +36,7 @@ const Profiles = () => {
             aria-expanded={open ? 'true' : undefined}
           >
             <Avatar
-              sx={{ width: 30, height: 30 }}
+              sx={{ width: 34, height: 34 }}
               src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjalJSP1DOdXgqZw-2VxxfQIDjc4bmhRmqeA&s'
             />
           </IconButton>
