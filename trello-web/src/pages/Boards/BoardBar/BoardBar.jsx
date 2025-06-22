@@ -36,7 +36,6 @@ const BoardBar = () => {
       justifyContent: 'space-between',
       gap: 2,
       overflowX: 'auto',
-      borderBottom: '1px solid white',
       bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -88,7 +87,15 @@ const BoardBar = () => {
         </Button>
         <AvatarGroup
           max={3}
-          sx={{ gap: '10px', '& .MuiAvatar-root': { width: 34, height: 34, fontSize: 16, border: 'none' } } }
+          sx={{ gap: '10px', '& .MuiAvatar-root': {
+            width: 34,
+            height: 34,
+            fontSize: 16,
+            border: 'none',
+            color: 'white',
+            cursor: 'pointer',
+            '&:first-of-type': { bgcolor: '#a4b0be' }
+          } } }
         >
           <Tooltip title='Cheesethank'>
             <Avatar
