@@ -13,16 +13,16 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
 const MENU_STYLES = {
-  color: 'primary.main',
-  bgcolor: 'white',
+  color: 'white',
+  bgcolor: 'transparent',
   border: 'none',
   paddingX: '5px',
   borderRadius: '4px',
-  '& .MuiSvgIcon-root': {
-    color: 'primary.main'
+  '.MuiSvgIcon-root': {
+    color: 'white'
   },
   '&:hover': {
-    bgcolor: 'primary.light'
+    bgcolor: 'primary.50'
   }
 }
 
@@ -36,7 +36,8 @@ const BoardBar = () => {
       justifyContent: 'space-between',
       gap: 2,
       overflowX: 'auto',
-      borderTop: '1px solid rgb(14, 132, 215)'
+      borderBottom: '1px solid white',
+      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
     }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Chip
@@ -71,12 +72,23 @@ const BoardBar = () => {
         />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Button variant='outlined' startIcon={<PersonAddIcon />}>
+        <Button
+          variant='outlined'
+          startIcon={<PersonAddIcon />}
+          sx={{
+            color: 'white',
+            borderColor: 'white',
+            '&:hover': {
+              borderColor: 'white',
+              bgcolor: 'primary.50'
+            }
+          }}
+        >
           Invite
         </Button>
         <AvatarGroup
           max={3}
-          sx={{ '& .MuiAvatar-root': { width: 34, height: 34, fontSize: 16 } } }
+          sx={{ gap: '10px', '& .MuiAvatar-root': { width: 34, height: 34, fontSize: 16, border: 'none' } } }
         >
           <Tooltip title='Cheesethank'>
             <Avatar

@@ -36,7 +36,7 @@ const Profiles = () => {
             aria-expanded={open ? 'true' : undefined}
           >
             <Avatar
-              sx={{ width: 34, height: 34 }}
+              sx={{ width: 36, height: 36 }}
               src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjalJSP1DOdXgqZw-2VxxfQIDjc4bmhRmqeA&s'
             />
           </IconButton>
