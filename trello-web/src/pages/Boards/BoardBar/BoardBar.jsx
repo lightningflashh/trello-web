@@ -12,6 +12,8 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
+import { capitalizeFirstLetter } from '~/utils/formatters'
+
 const MENU_STYLES = {
   color: 'white',
   bgcolor: 'transparent',
@@ -26,7 +28,7 @@ const MENU_STYLES = {
   }
 }
 
-const BoardBar = () => {
+const BoardBar = ({ board }) => {
   return (
     <Box px={2} sx={{
       width: '100%',
@@ -41,13 +43,13 @@ const BoardBar = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <Chip
           icon={<DashBoardIcon />}
-          label='MERN Stack Project'
+          label= {board?.title}
           clickable
           sx={ MENU_STYLES }
         />
         <Chip
           icon={<VpnLockIcon />}
-          label='Public/Private Workspace'
+          label={capitalizeFirstLetter(board?.type)}
           clickable
           sx={ MENU_STYLES }
         />

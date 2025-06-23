@@ -20,10 +20,14 @@ import DragHandleIcon from '@mui/icons-material/DragHandle'
 
 import ListCards from './ListCards/ListCards'
 import theme from '~/theme'
+import { mapOrder } from '~/utils/sorts'
 
-const Column = () => {
+const Column = ({ column }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
+
+  const sortedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
   }
@@ -55,7 +59,7 @@ const Column = () => {
           cursor: 'pointer'
         }}
         >
-          Colum title
+          {column?.title}
         </Typography>
         <Box>
           <Tooltip title='More options'>
@@ -108,7 +112,7 @@ const Column = () => {
         </Box>
       </Box>
       {/* List Cards */}
-      <ListCards />
+      <ListCards cards={sortedCards}/>
       {/* Box Column Footer */}
       <Box sx={{
         height: theme.trello.columnFooterHeight,

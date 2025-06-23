@@ -9,30 +9,33 @@ import GroupIcon from '@mui/icons-material/Group'
 import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 
-const Card = ({ hasMediaCard }) => {
+const Card = ({ card }) => {
+  const shouldCardActions = () => {
+    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
+  }
   return (
     <MuiCard sx={{
       cursor: 'pointer',
       boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
       overflow: 'unset'
     }}>
-      {hasMediaCard && (
-        <CardMedia
-          sx={{ height: 140 }}
-          image='https://create.microsoft.com/_next/image?url=https%3A%2F%2Fcdn.create.microsoft.com%2Fcmsassets%2FTarotCards-HERO-2.webp&w=1920&q=75'
-          title='green iguana'
-        />
-      )}
+      {card?.cover && (<CardMedia sx={{ height: 140 }} image={card?.cover}/>)}
+
       <CardContent sx={{ px: 1.5, '&:last-child': { pb: 1.5 } }}>
-        <Typography>
-          MERN Stack
-        </Typography>
+        <Typography>{card?.title}</Typography>
       </CardContent>
-      {hasMediaCard && (
+
+      {shouldCardActions() && (
         <CardActions sx={{ p: '0 4px 8px 4px' }}>
-          <Button size='small' startIcon={<GroupIcon />}>20</Button>
-          <Button size='small' startIcon={<CommentIcon />}>15</Button>
-          <Button size='small' startIcon={<AttachmentIcon />}>10</Button>
+          {!!card?.memberIds?.length && (
+            <Button size='small' startIcon={<GroupIcon />}>{card?.memberIds?.length}</Button>
+          )}
+          {!!card?.comments?.length && (
+            <Button size='small' startIcon={<CommentIcon />}>{card?.comments?.length}</Button>
+          )}
+          {!!card?.attachments?.length && (
+            <Button size='small' startIcon={<AttachmentIcon />}>{card?.attachments?.length}</Button>
+          )}
         </CardActions>
       )}
     </MuiCard>
