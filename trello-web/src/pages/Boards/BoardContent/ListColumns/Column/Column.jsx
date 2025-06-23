@@ -18,11 +18,30 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import AddCardIcon from '@mui/icons-material/AddCard'
 import DragHandleIcon from '@mui/icons-material/DragHandle'
 
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+
 import ListCards from './ListCards/ListCards'
 import theme from '~/theme'
 import { mapOrder } from '~/utils/sorts'
 
 const Column = ({ column }) => {
+
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: column._id,
+    data: { ...column }
+  })
+  const dndKitColumnStyles = {
+    touchAction: 'none',
+    /* Should be used Translate.toString()
+    * instead of CSS.Transform.toString() for detecting stretching issues
+    * with the dnd-kit library.
+    */
+    transform: CSS.Translate.toString(transform),
+    // transform: CSS.Transform.toString(transform),
+    transition
+  }
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
@@ -35,16 +54,22 @@ const Column = ({ column }) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
   return (
-    <Box sx={{
-      minWidth: '300px',
-      maxWidth: '300px',
-      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'),
-      ml: 2,
-      borderRadius: '6px',
-      height: 'fit-content',
-      maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
-    }}>
+    <Box
+      ref={setNodeRef}
+      style={dndKitColumnStyles}
+      {...attributes}
+      {...listeners}
+      sx={{
+        minWidth: '300px',
+        maxWidth: '300px',
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'),
+        ml: 2,
+        borderRadius: '6px',
+        height: 'fit-content',
+        maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
+      }}>
       {/* Box Column Header */}
       <Box sx={{
         height: theme.trello.columnHeaderHeight,
