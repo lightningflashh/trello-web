@@ -1,42 +1,50 @@
 import Button from '@mui/material/Button'
-import Box from '@mui/material/Box'
 import Column from './Column/Column'
+import Box from '@mui/material/Box'
+
+import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd'
 
-const ListColumns = ({columns}) => {
+const ListColumns = ({ columns }) => {
+  /**
+   *The <SortableContext> component requires that you pass it the sorted array of the unique identifiers associated to each sortable item via the items prop.
+   This array should look like ["1", "2", "3"], not [{id: "1"}, {id: "2}, {id: "3}].
+   */
   return (
-    <Box sx={{
-      bgcolor: 'inherit',
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      overflowX: 'auto',
-      overflowY: 'hidden',
-      '&::-webkit-scrollbar-track': { m: 2 }
-    }}>
-      {columns?.map(column => <Column key={column._id} column={column}/>)}
+    <SortableContext items={columns?.map(c => c._id)} strategy={horizontalListSortingStrategy}>
       <Box sx={{
-        minWidth: '200px',
-        maxWidth: '200px',
-        mx: 2,
-        borderRadius: '6px',
-        height: 'fit-content',
-        bgcolor: '#ffffff3d'
+        bgcolor: 'inherit',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        '&::-webkit-scrollbar-track': { m: 2 }
       }}>
-        <Button
-          startIcon={<PlaylistAddIcon />}
-          sx={{
-            color: 'white',
-            width: '100%',
-            justifyContent: 'flex-start',
-            pl: 2.5,
-            py: 1
-          }}
-        >Add new column
-        </Button>
+        {columns?.map(column => <Column key={column._id} column={column}/>)}
+        <Box sx={{
+          minWidth: '200px',
+          maxWidth: '200px',
+          mx: 2,
+          borderRadius: '6px',
+          height: 'fit-content',
+          bgcolor: '#ffffff3d'
+        }}>
+          <Button
+            startIcon={<PlaylistAddIcon />}
+            sx={{
+              color: 'white',
+              width: '100%',
+              justifyContent: 'flex-start',
+              pl: 2.5,
+              py: 1
+            }}
+          >Add new column
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </SortableContext>
   )
 }
 
