@@ -22,22 +22,22 @@ const Card = ({ card }) => {
     data: { ...card }
   })
 
-  const dndKitCardStyles = {
-    touchAction: 'none',
-    transform: CSS.Translate.toString(transform),
-    transition,
-    'opacity': isDragging ? 0.5 : undefined,
-    border: isDragging ? '1px solid #2ecc71' : 'none'
-  }
-
   return (
     <MuiCard
-      ref={setNodeRef} style={dndKitCardStyles} {...attributes} {...listeners}
+      ref={setNodeRef} {...attributes} {...listeners}
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
         overflow: card?.FE_PlaceholderCard ? 'hidden' : 'unset',
-        height: card?.FE_PlaceholderCard ? '0px' : 'unset'
+        height: card?.FE_PlaceholderCard ? '0px' : 'unset',
+        border: isDragging ? '1px solid #2ecc71' : '1px solid transparent',
+        opacity: isDragging ? 0.5 : 1,
+        touchAction: 'none',
+        transform: transform ? `${CSS.Translate.toString(transform)}` : 'none',
+        transition,
+        '&:hover': {
+          borderColor: (theme) => theme.palette.primary.main
+        }
       }}>
       {card?.cover && (<CardMedia sx={{ height: 140 }} image={card?.cover}/>)}
 
