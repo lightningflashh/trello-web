@@ -1,4 +1,7 @@
 import { useState } from 'react'
+
+import { toast } from 'react-toastify'
+
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
@@ -58,7 +61,12 @@ const Column = ({ column }) => {
   const [newCardTitle, setNewCardTitle] = useState('')
 
   const handleAddNewCard = () => {
-    if (!newCardTitle) return
+    if (!newCardTitle) {
+      toast.error('Please enter a card title', {
+        position: 'bottom-right'
+      })
+      return
+    }
     // Call the API to add a new card
     toggleCardModel()
     setNewCardTitle('')
