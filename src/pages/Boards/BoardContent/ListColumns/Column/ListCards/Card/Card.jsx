@@ -30,7 +30,7 @@ const Card = ({ card }) => {
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
         overflow: card?.FE_PlaceholderCard ? 'hidden' : 'unset',
         height: card?.FE_PlaceholderCard ? '0px' : 'unset',
-        border: isDragging ? '1px solid #2ecc71' : '1px solid transparent',
+        border: isDragging ? '1px solid #2ecc71' : '0px solid transparent',
         opacity: isDragging ? 0.5 : 1,
         touchAction: 'none',
         transform: transform ? `${CSS.Translate.toString(transform)}` : 'none',

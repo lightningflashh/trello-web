@@ -30,7 +30,7 @@ import ListCards from './ListCards/ListCards'
 import theme from '~/theme'
 import { mapOrder } from '~/utils/sorts'
 
-const Column = ({ column }) => {
+const Column = ({ column, createNewCard }) => {
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -60,7 +60,7 @@ const Column = ({ column }) => {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const handleAddNewCard = () => {
+  const handleAddNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter a card title', {
         position: 'bottom-right'
@@ -68,6 +68,12 @@ const Column = ({ column }) => {
       return
     }
     // Call the API to add a new card
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column._id
+    }
+    await createNewCard(newCardData)
+
     toggleCardModel()
     setNewCardTitle('')
   }

@@ -4,7 +4,9 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import Container from '@mui/material/Container'
-import { fetchBoardDetailsAPI } from '~/apis'
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI } from '~/apis'
+import { generatePlaceholderCard } from '~/utils/formatters'
+import { isEmpty } from 'lodash'
 
 const Board = () => {
   const [board, setBoard] = useState(null)
@@ -14,19 +16,47 @@ const Board = () => {
     const boardId = '68639eea385e6f83eb4ac36d'
     fetchBoardDetailsAPI(boardId)
       .then(board => {
+        board.columns.forEach(column => {
+          if (isEmpty(column.cards)) {
+            column.cards = [generatePlaceholderCard(column)]
+            column.cardOrderIds = [generatePlaceholderCard(column)._id]
+          }
+        })
         setBoard(board)
       })
-      .catch(error => {
-        console.error('Error fetching board details:', error)
-      })
   }, [])
+
+  const createNewColumn = async (columnData) => {
+    const newColumn = await createNewColumnAPI({ ...columnData, boardId: board._id })
+    // Generate a placeholder card for the new column to ensure it has at least one card for drag-and-drop
+    newColumn.cards = [generatePlaceholderCard(newColumn)]
+    newColumn.cardOrderIds = [generatePlaceholderCard(newColumn)._id]
+    // Update the board state with the new column
+    const updatedBoard = { ...board }
+    await updatedBoard.columns.push(newColumn)
+    await updatedBoard.columnOrderIds.push(newColumn._id)
+    setBoard(updatedBoard)
+  }
+
+  const createNewCard = async (cardData) => {
+    const newCard = await createNewCardAPI({ ...cardData, boardId: board._id, columnId: cardData.columnId })
+    // Update the board state with the new card
+    const updatedBoard = { ...board }
+    // Find the column where the new card should be added
+    const updatedColumn = updatedBoard.columns.find(column => column._id === newCard.columnId)
+    if (updatedColumn) {
+      updatedColumn.cards.push(newCard)
+      updatedColumn.cardOrderIds.push(newCard._id)
+    }
+    setBoard(updatedBoard)
+  }
 
   return (
     <>
       <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
         <AppBar/>
         <BoardBar board={board}/>
-        <BoardContent board={board}/>
+        <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard} />
       </Container>
     </>
   )

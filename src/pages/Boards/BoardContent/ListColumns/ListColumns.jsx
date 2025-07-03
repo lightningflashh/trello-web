@@ -12,18 +12,24 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd'
 import CloseIcon from '@mui/icons-material/Close'
 
-const ListColumns = ({ columns }) => {
+const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
   const [columnModel, setColumnModel] = useState(false)
   const toggleColumnModel = () => setColumnModel(!columnModel)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const handleAddNewColumn = () => {
+  const handleAddNewColumn = async() => {
     if (!newColumnTitle) {
       toast.error('Please enter a column title')
       return
     }
     // Call the API to add a new column
+    const newColumnData = {
+      title: newColumnTitle
+    }
+
+    await createNewColumn(newColumnData)
+
     toggleColumnModel()
     setNewColumnTitle('')
   }
@@ -42,7 +48,7 @@ const ListColumns = ({ columns }) => {
         overflowY: 'hidden',
         '&::-webkit-scrollbar-track': { m: 2 }
       }}>
-        {columns?.map(column => <Column key={column._id} column={column}/>)}
+        {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard} />)}
 
         {!columnModel ?
           <Box
