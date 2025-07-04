@@ -31,7 +31,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: { distance: 10 }
   // })
@@ -235,9 +235,10 @@ const BoardContent = ({ board, createNewColumn, createNewCard }) => {
         // Update the sorted columns based on the drag and drop
         const dndSortedColumns = arrayMove(sortedColumns, currentColumnIndex, newColumnIndex)
 
-        // Update the column order in the board object and store it & call API to save the new order
-        // const dndSortedColumnsIds = dndSortedColumns.map(col => col._id)
+        moveColumns(dndSortedColumns)
 
+        // MUST update the sortedColumns state avoid flickering or delaying because of API call is asynchronous
+        // This strick to enhance the user experience
         setSortedColumns(dndSortedColumns)
       }
     }

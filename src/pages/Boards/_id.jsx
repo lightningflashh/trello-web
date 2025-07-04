@@ -4,7 +4,7 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import Container from '@mui/material/Container'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI } from '~/apis'
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { isEmpty } from 'lodash'
 
@@ -50,13 +50,29 @@ const Board = () => {
     }
     setBoard(updatedBoard)
   }
+  // Function to handle moving a column completely
+  const moveColumns = async (dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map(col => col._id)
+
+    const updatedBoard = { ...board }
+    updatedBoard.columns = dndOrderedColumns
+    updatedBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(updatedBoard)
+    // Call API to save the new order
+    await updateBoardDetailsAPI(board._id, { columnOrderIds: dndOrderedColumnsIds })
+  }
 
   return (
     <>
       <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
         <AppBar/>
         <BoardBar board={board}/>
-        <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard} />
+        <BoardContent
+          board={board}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+          moveColumns={moveColumns}
+        />
       </Container>
     </>
   )
