@@ -51,7 +51,7 @@ const Board = () => {
     setBoard(updatedBoard)
   }
   // Function to handle moving a column completely
-  const moveColumns = async (dndOrderedColumns) => {
+  const moveColumns = (dndOrderedColumns) => {
     const dndOrderedColumnsIds = dndOrderedColumns.map(col => col._id)
 
     const updatedBoard = { ...board }
@@ -59,7 +59,7 @@ const Board = () => {
     updatedBoard.columnOrderIds = dndOrderedColumnsIds
     setBoard(updatedBoard)
     // Call API to save the new order
-    await updateBoardDetailsAPI(board._id, { columnOrderIds: dndOrderedColumnsIds })
+    updateBoardDetailsAPI(board._id, { columnOrderIds: dndOrderedColumnsIds })
   }
 
   return (

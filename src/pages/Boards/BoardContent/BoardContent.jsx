@@ -235,11 +235,11 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
         // Update the sorted columns based on the drag and drop
         const dndSortedColumns = arrayMove(sortedColumns, currentColumnIndex, newColumnIndex)
 
-        moveColumns(dndSortedColumns)
-
         // MUST update the sortedColumns state avoid flickering or delaying because of API call is asynchronous
-        // This strick to enhance the user experience
+        // This strict to enhance the user experience
         setSortedColumns(dndSortedColumns)
+
+        moveColumns(dndSortedColumns)
       }
     }
 
