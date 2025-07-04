@@ -1,9 +1,8 @@
-import { useEffect, useState, useCallback, useRef, act } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 
 import Box from '@mui/material/Box'
 
 import ListColumns from './ListColumns/ListColumns'
-import { mapOrder } from '~/utils/sorts'
 
 import {
   DndContext,
@@ -31,7 +30,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) => {
+const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, moveCardInAColumn }) => {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: { distance: 10 }
   // })
@@ -60,7 +59,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
   const lastOverId = useRef(null)
 
   useEffect(() => {
-    setSortedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'))
+    // Không cần sắp xếp lại columns ở đây vì đã sắp xếp trong bước fetchBoardDetailsAPI
+    setSortedColumns(board.columns)
   }, [board])
 
   const findColumnByCardId = (id) => {
@@ -213,6 +213,7 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
         const newCardIndex = overColumn?.cards?.findIndex(card => card._id === overCardId)
 
         const dndSortedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex)
+        const dndSortedCardOrderIds = dndSortedCards.map(card => card._id)
 
         setSortedColumns(previousColumns => {
           const nextColumns = cloneDeep(previousColumns)
@@ -220,10 +221,12 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns }) =>
 
           // Cập nhật lại cards và cardOrderIds của activeColumn
           targetColumn.cards = dndSortedCards
-          targetColumn.cardOrderIds = dndSortedCards.map(card => card._id)
+          targetColumn.cardOrderIds = dndSortedCardOrderIds
 
           return nextColumns
         })
+        // Call the API to save the new order of cards in the column
+        moveCardInAColumn(oldColumnWhenDraggingCard._id, dndSortedCards, dndSortedCardOrderIds)
       }
     }
 

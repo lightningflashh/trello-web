@@ -28,7 +28,6 @@ import { CSS } from '@dnd-kit/utilities'
 
 import ListCards from './ListCards/ListCards'
 import theme from '~/theme'
-import { mapOrder } from '~/utils/sorts'
 
 const Column = ({ column, createNewCard }) => {
 
@@ -53,7 +52,7 @@ const Column = ({ column, createNewCard }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
-  const sortedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const sortedCards = column.cards
 
   const [cardModel, setCardModel] = useState(false)
   const toggleCardModel = () => setCardModel(!cardModel)
