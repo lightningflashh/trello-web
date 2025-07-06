@@ -35,7 +35,9 @@ const BoardContent = ({ board,
   createNewCard,
   moveColumns,
   moveCardInAColumn,
-  moveCardToDifferentColumn }) => {
+  moveCardToDifferentColumn,
+  deleteColumnDetails
+}) => {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: { distance: 10 }
   // })
@@ -328,7 +330,12 @@ const BoardContent = ({ board,
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
         p: '10px 0'
       }}>
-        <ListColumns columns={sortedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard} />
+        <ListColumns
+          columns={sortedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+          deleteColumnDetails={deleteColumnDetails}
+        />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}
           {(activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) && <Column column={activeDragItemData} /> }

@@ -6,16 +6,19 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import Container from '@mui/material/Container'
-import { 
+import {
   fetchBoardDetailsAPI,
   createNewColumnAPI,
   createNewCardAPI,
   updateBoardDetailsAPI,
   updateColumnDetailsAPI,
+  deleteColumnDetailsAPI,
   moveCardToDifferentColumnAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utils/sorts'
+
+import { toast } from 'react-toastify'
 
 const Board = () => {
   const [board, setBoard] = useState(null)
@@ -97,7 +100,6 @@ const Board = () => {
   }
 
   const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
-
     const dndOrderedColumnsIds = dndOrderedColumns.map(col => col._id)
     const updatedBoard = { ...board }
     updatedBoard.columns = dndOrderedColumns
@@ -113,7 +115,19 @@ const Board = () => {
       nextColumnId,
       nextCardOrderIds: dndOrderedColumns.find(col => col._id === nextColumnId)?.cardOrderIds
     })
+  }
 
+  const deleteColumnDetails = (columnId) => {
+    const updatedBoard = { ...board }
+    // Remove the column from the board
+    updatedBoard.columns = updatedBoard.columns.filter(column => column._id !== columnId)
+    updatedBoard.columnOrderIds = updatedBoard.columnOrderIds.filter(_id => _id !== columnId)
+    setBoard(updatedBoard)
+
+    // Call API to delete the column
+    deleteColumnDetailsAPI(columnId).then(res => {
+      toast.success(res?.deleteResult)
+    })
   }
 
   if (!board) {
@@ -133,6 +147,7 @@ const Board = () => {
           moveColumns={moveColumns}
           moveCardInAColumn={moveCardInAColumn}
           moveCardToDifferentColumn={moveCardToDifferentColumn}
+          deleteColumnDetails={deleteColumnDetails}
         />
       </Container>
     </>

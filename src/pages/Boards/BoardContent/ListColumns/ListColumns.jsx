@@ -12,7 +12,7 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd'
 import CloseIcon from '@mui/icons-material/Close'
 
-const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
+const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumnDetails }) => {
   const [columnModel, setColumnModel] = useState(false)
   const toggleColumnModel = () => setColumnModel(!columnModel)
 
@@ -48,7 +48,12 @@ const ListColumns = ({ columns, createNewColumn, createNewCard }) => {
         overflowY: 'hidden',
         '&::-webkit-scrollbar-track': { m: 2 }
       }}>
-        {columns?.map(column => <Column key={column._id} column={column} createNewCard={createNewCard} />)}
+        {columns?.map(column => <Column
+          key={column._id}
+          column={column}
+          createNewCard={createNewCard}
+          deleteColumnDetails={deleteColumnDetails}
+        />)}
 
         {!columnModel ?
           <Box
