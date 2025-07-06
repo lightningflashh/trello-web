@@ -30,7 +30,12 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, moveCardInAColumn }) => {
+const BoardContent = ({ board,
+  createNewColumn,
+  createNewCard,
+  moveColumns,
+  moveCardInAColumn,
+  moveCardToDifferentColumn }) => {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: { distance: 10 }
   // })
@@ -75,7 +80,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, move
     over,
     activeColumn,
     activeDraggingCardId,
-    activeDraggingCardData
+    activeDraggingCardData,
+    triggerFrom
   ) => {
     setSortedColumns(previousColumns => {
       // Tìm vị trí của overCard trong overColumn
@@ -130,6 +136,16 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, move
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(card => card._id)
       }
 
+      if (triggerFrom === 'handleDragEnd') {
+        // Call the API to save the new order of cards in different columns
+        moveCardToDifferentColumn(
+          activeDraggingCardId,
+          oldColumnWhenDraggingCard._id, // Không dùng activeDragItemData._id vì sau khi qua hàm onDragOver và handleDragEnd thì columnId sẽ không còn là column cũ nữa
+          nextOverColumn._id,
+          nextColumns
+        )
+      }
+
       return nextColumns
     })
   }
@@ -174,7 +190,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, move
         over,
         activeColumn,
         activeDraggingCardId,
-        activeDraggingCardData
+        activeDraggingCardData,
+        'handleDragOver'
       )
     }
   }
@@ -204,7 +221,8 @@ const BoardContent = ({ board, createNewColumn, createNewCard, moveColumns, move
           over,
           activeColumn,
           activeDraggingCardId,
-          activeDraggingCardData
+          activeDraggingCardData,
+          'handleDragEnd'
         )
       } else {
         // Hành động kéo thả trong cùng 1 column

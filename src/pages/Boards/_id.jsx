@@ -6,7 +6,13 @@ import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import Container from '@mui/material/Container'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI } from '~/apis'
+import { 
+  fetchBoardDetailsAPI,
+  createNewColumnAPI,
+  createNewCardAPI,
+  updateBoardDetailsAPI,
+  updateColumnDetailsAPI,
+  moveCardToDifferentColumnAPI } from '~/apis'
 import { generatePlaceholderCard } from '~/utils/formatters'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '~/utils/sorts'
@@ -83,6 +89,24 @@ const Board = () => {
     updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardOrderIds })
   }
 
+  const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
+
+    const dndOrderedColumnsIds = dndOrderedColumns.map(col => col._id)
+    const updatedBoard = { ...board }
+    updatedBoard.columns = dndOrderedColumns
+    updatedBoard.columnOrderIds = dndOrderedColumnsIds
+    setBoard(updatedBoard)
+
+    moveCardToDifferentColumnAPI({
+      currentCardId,
+      prevColumnId,
+      prevCardOrderIds: dndOrderedColumns.find(col => col._id === prevColumnId)?.cardOrderIds,
+      nextColumnId,
+      nextCardOrderIds: dndOrderedColumns.find(col => col._id === nextColumnId)?.cardOrderIds
+    })
+
+  }
+
   if (!board) {
     // Do phải sắp xêp dữ liệu từ API nên có thể mất một chút thời gian để lấy dữ liệu
     return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress /></Box>
@@ -99,6 +123,7 @@ const Board = () => {
           createNewCard={createNewCard}
           moveColumns={moveColumns}
           moveCardInAColumn={moveCardInAColumn}
+          moveCardToDifferentColumn={moveCardToDifferentColumn}
         />
       </Container>
     </>
