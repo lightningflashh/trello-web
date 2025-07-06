@@ -60,8 +60,15 @@ const Board = () => {
     // Find the column where the new card should be added
     const updatedColumn = updatedBoard.columns.find(column => column._id === newCard.columnId)
     if (updatedColumn) {
-      updatedColumn.cards.push(newCard)
-      updatedColumn.cardOrderIds.push(newCard._id)
+      // If the column has a placeholder card, replace it with the new card
+      if (updatedColumn.cards.some(card => card.FE_PlaceholderCard)) {
+        updatedColumn.cards = [newCard]
+        updatedColumn.cardOrderIds = [newCard._id]
+      } else {
+        // If the column already has cards, add the new card to the existing cards
+        updatedColumn.cards.push(newCard)
+        updatedColumn.cardOrderIds.push(newCard._id)
+      }
     }
     setBoard(updatedBoard)
   }
@@ -96,11 +103,13 @@ const Board = () => {
     updatedBoard.columns = dndOrderedColumns
     updatedBoard.columnOrderIds = dndOrderedColumnsIds
     setBoard(updatedBoard)
-
+    // Check if the previous column has a placeholder card => DO NOT SAVE IT TO DATABASE
+    let prevCardOrderIds = dndOrderedColumns.find(col => col._id === prevColumnId)?.cardOrderIds
+    if (prevCardOrderIds[0].includes('placeholder-card')) prevCardOrderIds = []
     moveCardToDifferentColumnAPI({
       currentCardId,
       prevColumnId,
-      prevCardOrderIds: dndOrderedColumns.find(col => col._id === prevColumnId)?.cardOrderIds,
+      prevCardOrderIds,
       nextColumnId,
       nextCardOrderIds: dndOrderedColumns.find(col => col._id === nextColumnId)?.cardOrderIds
     })
