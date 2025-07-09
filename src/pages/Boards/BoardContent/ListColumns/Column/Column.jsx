@@ -1,4 +1,11 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+
+import { cloneDeep } from 'lodash'
+
+import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 
 import { toast } from 'react-toastify'
 
@@ -31,7 +38,11 @@ import theme from '~/theme'
 
 import { useConfirm } from 'material-ui-confirm'
 
-const Column = ({ column, createNewCard, deleteColumnDetails }) => {
+const Column = ({ column }) => {
+
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
+
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
@@ -61,7 +72,7 @@ const Column = ({ column, createNewCard, deleteColumnDetails }) => {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const handleAddNewCard = () => {
+  const handleAddNewCard = async() => {
     if (!newCardTitle) {
       toast.error('Please enter a card title', {
         position: 'bottom-right'
@@ -73,7 +84,24 @@ const Column = ({ column, createNewCard, deleteColumnDetails }) => {
       title: newCardTitle,
       columnId: column._id
     }
-    createNewCard(newCardData)
+
+    const newCard = await createNewCardAPI({ ...newCardData, boardId: board._id, columnId: newCardData.columnId })
+    // Update the board state with the new card
+    const updatedBoard = cloneDeep(board)
+    // Find the column where the new card should be added
+    const updatedColumn = updatedBoard.columns.find(column => column._id === newCard.columnId)
+    if (updatedColumn) {
+      // If the column has a placeholder card, replace it with the new card
+      if (updatedColumn.cards.some(card => card.FE_PlaceholderCard)) {
+        updatedColumn.cards = [newCard]
+        updatedColumn.cardOrderIds = [newCard._id]
+      } else {
+        // If the column already has cards, add the new card to the existing cards
+        updatedColumn.cards.push(newCard)
+        updatedColumn.cardOrderIds.push(newCard._id)
+      }
+    }
+    dispatch(updateCurrentActiveBoard(updatedBoard))
 
     toggleCardModel()
     setNewCardTitle('')
@@ -89,7 +117,16 @@ const Column = ({ column, createNewCard, deleteColumnDetails }) => {
         cancellationText: 'Cancel'
       })
       .then(() => {
-        deleteColumnDetails(column._id)
+        const updatedBoard = { ...board }
+        // Remove the column from the board
+        updatedBoard.columns = updatedBoard.columns.filter(col => col._id !== column._id)
+        updatedBoard.columnOrderIds = updatedBoard.columnOrderIds.filter(_id => _id !== column._id)
+        dispatch(updateCurrentActiveBoard(updatedBoard))
+
+        // Call API to delete the column
+        deleteColumnDetailsAPI(column._id).then(res => {
+          toast.success(res?.deleteResult)
+        })
       })
       .catch(() => {})
   }

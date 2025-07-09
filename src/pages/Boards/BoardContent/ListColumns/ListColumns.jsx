@@ -1,6 +1,14 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { toast } from 'react-toastify'
+
+import { createNewColumnAPI } from '~/apis'
+import { generatePlaceholderCard } from '~/utils/formatters'
+
+import { cloneDeep } from 'lodash'
+
+import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 
 import Button from '@mui/material/Button'
 import Column from './Column/Column'
@@ -12,13 +20,16 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd'
 import CloseIcon from '@mui/icons-material/Close'
 
-const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumnDetails }) => {
+const ListColumns = ({ columns }) => {
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
+
   const [columnModel, setColumnModel] = useState(false)
   const toggleColumnModel = () => setColumnModel(!columnModel)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const handleAddNewColumn = () => {
+  const handleAddNewColumn = async () => {
     if (!newColumnTitle) {
       toast.error('Please enter a column title')
       return
@@ -28,7 +39,22 @@ const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumnDeta
       title: newColumnTitle
     }
 
-    createNewColumn(newColumnData)
+    // Call the API to create a new column and set board state
+    const newColumn = await createNewColumnAPI({ ...newColumnData, boardId: board._id })
+    // Generate a placeholder card for the new column to ensure it has at least one card for drag-and-drop
+    newColumn.cards = [generatePlaceholderCard(newColumn)]
+    newColumn.cardOrderIds = [generatePlaceholderCard(newColumn)._id]
+    // Update the board state with the new column
+    /** spread operator {...board} không nên dùng vì việc này sẽ tạo ra một bản sao nông (shallow copy) của board
+    * vi phạm nguyên tắc immutability (tính bất biến) của Redux do push trực tiếp vào mảng columns và columnOrderIds
+    * ngoài ra, có thể dùng spread operator và thay vì dùng push, ta sẽ dùng concat await updatedBoard.columns.concat([newColumn]) để tạo ra mảng mới luôn
+    */
+    const updatedBoard = cloneDeep(board)
+    await updatedBoard.columns.push(newColumn)
+    await updatedBoard.columnOrderIds.push(newColumn._id)
+
+    // Cập nhật lại board trong Redux store
+    dispatch(updateCurrentActiveBoard(updatedBoard))
 
     toggleColumnModel()
     setNewColumnTitle('')
@@ -51,8 +77,6 @@ const ListColumns = ({ columns, createNewColumn, createNewCard, deleteColumnDeta
         {columns?.map(column => <Column
           key={column._id}
           column={column}
-          createNewCard={createNewCard}
-          deleteColumnDetails={deleteColumnDetails}
         />)}
 
         {!columnModel ?
