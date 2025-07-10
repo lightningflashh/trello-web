@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
-import { Box, CircularProgress } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import { Box } from '@mui/material'
 
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
@@ -16,18 +17,18 @@ import { toast } from 'react-toastify'
 import { fetchBoardDetailsAPI, updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { useParams } from 'react-router-dom'
+
 import { cloneDeep } from 'lodash'
 
 const Board = () => {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+  const { boardId } = useParams()
 
   useEffect(() => {
-    // Simulate fetching board data
-    const boardId = '68639eea385e6f83eb4ac36d'
-
     dispatch(fetchBoardDetailsAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
   // Function to handle moving a column completely
   const moveColumns = (dndOrderedColumns) => {
