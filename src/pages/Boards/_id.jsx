@@ -1,8 +1,5 @@
 import { useEffect } from 'react'
 
-import CircularProgress from '@mui/material/CircularProgress'
-import { Box } from '@mui/material'
-
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
@@ -12,7 +9,6 @@ import {
   updateColumnDetailsAPI,
   moveCardToDifferentColumnAPI } from '~/apis'
 
-import { toast } from 'react-toastify'
 
 import { fetchBoardDetailsAPI, updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,6 +16,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import { cloneDeep } from 'lodash'
+
+import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
 
 const Board = () => {
   const dispatch = useDispatch()
@@ -74,7 +72,7 @@ const Board = () => {
 
   if (!board) {
     // Do phải sắp xêp dữ liệu từ API nên có thể mất một chút thời gian để lấy dữ liệu
-    return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><CircularProgress /></Box>
+    return <PageLoadingSpinner caption="Loading board details..." />
   }
 
   return (

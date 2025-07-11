@@ -4,13 +4,13 @@ import { toast } from 'react-toastify'
 
 import { interceptorLoadingElements } from '~/utils/formatters'
 
-let authorizeAxiosInstance = axios.create()
+let authorizedAxiosInstance = axios.create()
 
-authorizeAxiosInstance.defaults.timeout = 1000 * 60 * 10
+authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10
 
-authorizeAxiosInstance.defaults.withCredentials = true
+authorizedAxiosInstance.defaults.withCredentials = true
 
-authorizeAxiosInstance.interceptors.request.use((config) => {
+authorizedAxiosInstance.interceptors.request.use((config) => {
   interceptorLoadingElements(true) // Bật loading cho tất cả các request tránh double click
   return config
 }, (error) => {
@@ -18,7 +18,7 @@ authorizeAxiosInstance.interceptors.request.use((config) => {
   return Promise.reject(error)
 })
 
-authorizeAxiosInstance.interceptors.response.use((response) => {
+authorizedAxiosInstance.interceptors.response.use((response) => {
   interceptorLoadingElements(false) // Tắt loading khi có response trả về
   return response
 }, (error) => {
@@ -37,4 +37,4 @@ authorizeAxiosInstance.interceptors.response.use((response) => {
   return Promise.reject(error)
 })
 
-export default authorizeAxiosInstance
+export default authorizedAxiosInstance
