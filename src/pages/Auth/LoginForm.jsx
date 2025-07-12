@@ -13,29 +13,43 @@ import Alert from '@mui/material/Alert'
 
 import { useForm } from 'react-hook-form'
 
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 
 import {
   FIELD_REQUIRED_MESSAGE,
-  EMAIL_RULE, 
+  EMAIL_RULE,
   EMAIL_RULE_MESSAGE,
   PASSWORD_RULE,
   PASSWORD_RULE_MESSAGE,
   PASSWORD_CONFIRMATION_MESSAGE } from '~/utils/validators.js'
 
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
-import { use } from 'react'
+
+import { loginUserAPI } from '~/redux/user/userSlice'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm()
-
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   let [searchParams] = useSearchParams()
   const registeredEmail = searchParams.get('registeredEmail')
   const verifiedEmail = searchParams.get('verifiedEmail')
 
   const submitLogIn = (data) => {
-    console.log('Login data:', data)
-    // Here you would typically handle the login logic, e.g., API call
+    const { email, password } = data
+    toast.promise(
+      dispatch(loginUserAPI({ email, password })),
+      {
+        pending: 'Logging in...'
+      }
+    ).then(res => {
+      if (res.meta.requestStatus === 'fulfilled') {
+        toast.success('Login successful!')
+        navigate('/')
+      }
+    })
   }
 
   return (
