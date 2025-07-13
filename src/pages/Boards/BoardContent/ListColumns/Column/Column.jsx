@@ -273,6 +273,7 @@ const Column = ({ column }) => {
               />
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button
+                  className='interceptor-loading'
                   variant='contained' color='success' size='small'
                   sx={{
                     boxShadow: 'none',

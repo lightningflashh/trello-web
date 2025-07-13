@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form'
 
 import {
   FIELD_REQUIRED_MESSAGE,
-  EMAIL_RULE, 
+  EMAIL_RULE,
   EMAIL_RULE_MESSAGE,
   PASSWORD_RULE,
   PASSWORD_RULE_MESSAGE,
@@ -22,12 +22,26 @@ import {
 
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 
+import { registerUserAPI } from '~/apis'
+
+import { toast } from 'react-toastify'
+
+import { useNavigate } from 'react-router-dom'
+
 const RegisterForm = () => {
   const { register, handleSubmit, formState: { errors }, watch } = useForm()
+  const navigate = useNavigate()
 
-  const submitRegister = (data) => {
-    console.log('Register data:', data)
-    // Here you would typically handle the registration logic, e.g., API call
+  const submitRegister = async (data) => {
+    const { email, password } = data
+    toast.promise(
+      registerUserAPI({ email, password }),
+      {
+        pending: 'Creating your account...',
+        success: 'Account created successfully! Redirecting...',
+        error: 'Error creating account. Please try again.'
+      }
+    ).then(user => navigate(`/login?registeredEmail=${user.email}`))
   }
 
   return (
@@ -99,6 +113,7 @@ const RegisterForm = () => {
           </Box>
           <CardActions sx={{ padding: '0 1em 1em 1em' }}>
             <Button
+              className="interceptor-loading"
               type="submit"
               variant="contained"
               color="primary"
