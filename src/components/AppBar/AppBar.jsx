@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
@@ -47,33 +48,39 @@ const AppBar = () => {
       overflowX: 'auto',
       bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0')
     }}>
-      <Box sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 2
-      }}>
-        <AppsIcon sx={{ color: 'white' }} />
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <SvgIcon
-            component={TrelloLogoIcon}
-            inheritViewBox
-            sx= {{ color: 'white' }}
-          />
-          <Typography variant='span' sx={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>Trello</Typography>
+      <Link to="/" style={{ color: 'inherit' }}>
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2
+        }}>
+          <Link to="/boards" style={{ color: 'inherit' }}>
+            <Tooltip title='Boards'>
+              <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
+            </Tooltip>
+          </Link>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <SvgIcon
+              component={TrelloLogoIcon}
+              inheritViewBox
+              sx= {{ color: 'white' }}
+            />
+            <Typography variant='span' sx={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>Trello</Typography>
+          </Box>
+          <Box sx={{ display: { xs: 'none', md:'flex' }, gap: 1 }}>
+            <WorkSpaces />
+            <Recent />
+            <Started />
+            <Templates />
+            <Button
+              variant='outlined'
+              startIcon={<LibraryAddIcon />}
+              sx={{ color: 'white' }}
+            >Create
+            </Button>
+          </Box>
         </Box>
-        <Box sx={{ display: { xs: 'none', md:'flex' }, gap: 1 }}>
-          <WorkSpaces />
-          <Recent />
-          <Started />
-          <Templates />
-          <Button
-            variant='outlined'
-            startIcon={<LibraryAddIcon />}
-            sx={{ color: 'white' }}
-          >Create
-          </Button>
-        </Box>
-      </Box>
+      </Link>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <TextField
           id='outlined-search'
