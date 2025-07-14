@@ -25,6 +25,7 @@ import { fetchBoardsAPI } from '~/apis'
 import { DEFAULT_PAGE, DEFAULT_ITEMS_PER_PAGE } from '~/utils/constants'
 
 import { styled } from '@mui/material/styles'
+import { Api } from '@mui/icons-material'
 // Styles của mấy cái Sidebar item menu, anh gom lại ra đây cho gọn.
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -62,17 +63,37 @@ function Boards() {
    */
   const page = parseInt(query.get('page') || '1', 10)
 
+  const updateStateData = (data) => {
+    setBoards(data.boards || [])
+    setTotalBoards(data.totalBoards || 0)
+  }
+
   useEffect(() => {
     // Mỗi khi cái url thay đổi ví dụ như ta chuyển trang, thì cái location.search lấy từ hook
     // useLocation của react-router-dom cũng thay đổi theo, đồng nghĩa hàm useEffect sẽ chạy lại
     // và fetch lại API theo đúng page mới vì cái location.search đã nằm trong dependencies của useEffect
 
     // Gọi API lấy danh sách boards ở đây...
-    fetchBoardsAPI(location.search).then(res => {
-      setBoards(res.boards || [])
-      setTotalBoards(res.totalBoards || 0)
-    })
+    const fetchBoards = async () => {
+      try {
+        const data = await fetchBoardsAPI(location.search)
+        updateStateData(data)
+      } catch (error) {
+        throw new Api(`Error fetching boards: ${error.message}`)
+      }
+    }
+
+    fetchBoards()
   }, [location.search])
+
+  const afterCreateNewBoard = async () => {
+    try {
+      const data = await fetchBoardsAPI(location.search)
+      updateStateData(data)
+    } catch (error) {
+      throw new Api(`Error fetching boards after creating a new board: ${error.message}`)
+    }
+  }
 
   // Lúc chưa tồn tại boards > đang chờ gọi api thì hiện loading
   if (!boards) {
@@ -101,7 +122,7 @@ function Boards() {
             </Stack>
             <Divider sx={{ my: 1 }} />
             <Stack direction="column" spacing={1}>
-              <SidebarCreateBoardModal />
+              <SidebarCreateBoardModal afterCreateNewBoard={afterCreateNewBoard} />
             </Stack>
           </Grid>
 

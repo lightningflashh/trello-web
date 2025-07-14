@@ -73,3 +73,9 @@ export const fetchBoardsAPI = async (searchPath) => {
   const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards${searchPath}`)
   return response.data
 }
+
+export const createNewBoardAPI = async (boardData) => {
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/boards`, boardData)
+  toast.success('Board created successfully!')
+  return response.data
+}

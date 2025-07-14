@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { createNewCardAPI, deleteColumnDetailsAPI } from '~/apis'
+import { createNewCardAPI, deleteColumnDetailsAPI, updateColumnDetailsAPI } from '~/apis'
 
 import { cloneDeep } from 'lodash'
 
@@ -14,7 +14,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -37,6 +36,8 @@ import ListCards from './ListCards/ListCards'
 import theme from '~/theme'
 
 import { useConfirm } from 'material-ui-confirm'
+
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 
 const Column = ({ column }) => {
 
@@ -139,6 +140,14 @@ const Column = ({ column }) => {
     setAnchorEl(null)
   }
 
+  const onUpdateColumnTitle = async (newTitle) => {
+    await updateColumnDetailsAPI(column._id, { title: newTitle })
+    const updatedBoard = cloneDeep(board)
+    const updatedColumn = updatedBoard.columns.find(c => c._id === column._id)
+    if (updatedColumn) updatedColumn.title = newTitle
+    dispatch(updateCurrentActiveBoard(updatedBoard))
+  }
+
   return (
     <div ref={setNodeRef} style={dndKitColumnStyles} {...attributes}>
       <Box
@@ -160,14 +169,11 @@ const Column = ({ column }) => {
           alignItems: 'center',
           justifyContent: 'space-between'
         }}>
-          <Typography variant='h6' sx={{
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            cursor: 'pointer'
-          }}
-          >
-            {column?.title}
-          </Typography>
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={onUpdateColumnTitle}
+            data-no-dnd="true"
+          />
           <Box>
             <Tooltip title='More options'>
               <ExpandMoreIcon
