@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 
 import Settings from '~/pages/Settings/Settings'
+import Boards from '~/pages/Boards'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) {
@@ -31,6 +32,7 @@ function App() {
       <Route element={<ProtectedRoute user={currentUser} />}>
         {/** Outlet sẽ chạy vào các child Route trong này */}
         <Route path='/boards/:boardId' element={<Board />} />
+        <Route path='/boards' element={<Boards />} />
 
         {/** User Settings */}
         <Route path='/settings/account' element={<Settings />} />

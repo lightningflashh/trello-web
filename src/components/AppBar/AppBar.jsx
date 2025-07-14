@@ -54,7 +54,11 @@ const AppBar = () => {
           alignItems: 'center',
           gap: 2
         }}>
-          <AppsIcon sx={{ color: 'white' }} />
+          <Link to="/boards" style={{ color: 'inherit' }}>
+            <Tooltip title='Boards'>
+              <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
+            </Tooltip>
+          </Link>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <SvgIcon
               component={TrelloLogoIcon}
