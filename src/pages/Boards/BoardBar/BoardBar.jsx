@@ -1,9 +1,9 @@
 import Chip from '@mui/material/Chip'
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import Box from '@mui/material/Box'
+
+import BoardUserGroup from '~/pages/Boards/BoardBar/BoardUserGroup'
 
 import DashBoardIcon from '@mui/icons-material/Dashboard'
 import VpnLockIcon from '@mui/icons-material/VpnLock'
@@ -89,43 +89,7 @@ const BoardBar = ({ board }) => {
         >
           Invite
         </Button>
-        <AvatarGroup
-          max={3}
-          sx={{ gap: '10px', '& .MuiAvatar-root': {
-            width: 34,
-            height: 34,
-            fontSize: 16,
-            border: 'none',
-            color: 'white',
-            cursor: 'pointer',
-            '&:first-of-type': { bgcolor: '#a4b0be' }
-          } } }
-        >
-          <Tooltip title='Cheesethank'>
-            <Avatar
-              alt="Cheesethank"
-              src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjalJSP1DOdXgqZw-2VxxfQIDjc4bmhRmqeA&s'
-            />
-          </Tooltip>
-          <Tooltip title='John Doe'>
-            <Avatar
-              alt="John Doe"
-              src='https://cdn3d.iconscout.com/3d/premium/thumb/graduate-student-3d-icon-download-in-png-blend-fbx-gltf-file-formats--avatar-study-education-knowledge-woman-profession-pack-people-icons-8264058.png?f=webp'
-            />
-          </Tooltip>
-          <Tooltip title='Jane Smith'>
-            <Avatar
-              alt="Jane Smith"
-              src='https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vecteezy.com%2Fvector-art%2F21770056-avatar-of-a-student-character&psig=AOvVaw3GKXc0X4vqIyAz5Yxgaecq&ust=1750643377418000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCODfyvb0g44DFQAAAAAdAAAAABAE'
-            />
-          </Tooltip>
-          <Tooltip title='Alex Johnson'>
-            <Avatar
-              alt="Alex Johnson"
-              src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjalJSP1DOdXgqZw-2VxxfQIDjc4bmhRmqeA&s'
-            />
-          </Tooltip>
-        </AvatarGroup>
+        <BoardUserGroup />
       </Box>
     </Box>
   )
