@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
@@ -36,9 +35,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   clearCurrentActiveCard,
   selectCurrentActiveCard,
-  updateCurrentActiveCard
+  updateCurrentActiveCard,
 } from '~/redux/activeCard/activeCardSlice'
 import { updateCardDetailsAPI } from '~/apis'
+import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 
 import { styled } from '@mui/material/styles'
 const SidebarItem = styled(Box)(({ theme }) => ({
@@ -72,7 +72,8 @@ function ActiveCard() {
     const updatedCard = await updateCardDetailsAPI(activeCard._id, updateData)
     // B1: Cập nhật lại state activeCard
     dispatch(updateCurrentActiveCard(updatedCard))
-    // B2:
+    // B2: Cập nhật lại bảng ghi Card trong activeBoard (nested data)
+    dispatch(updateCardInBoard(updatedCard))
     return updatedCard
   }
 
@@ -80,8 +81,11 @@ function ActiveCard() {
     callApiUpdateCard({ title: newTitle.trim() })
   }
 
+  const onUpdateCardDescription = (newDescription) => {
+    callApiUpdateCard({ description: newDescription })
+  }
+
   const onUploadCardCover = (event) => {
-    console.log(event.target?.files[0])
     const error = singleFileValidator(event.target?.files[0])
     if (error) {
       toast.error(error)
@@ -91,6 +95,13 @@ function ActiveCard() {
     reqData.append('cardCover', event.target?.files[0])
 
     // Gọi API...
+    toast.promise(
+      callApiUpdateCard(reqData).finally(() => event.target.value = '' // Reset lại input file sau khi upload thành công
+      ),
+      {
+        pending: 'Uploading card cover...'
+      }
+    )
   }
 
   return (
@@ -120,7 +131,7 @@ function ActiveCard() {
         }}>
           <CancelIcon color="error" sx={{ '&:hover': { color: 'error.light' } }} onClick={handleCloseModal} />
         </Box>
-        { activeCard && 
+        { activeCard &&
           <Box sx={{ mb: 4 }}>
             <img
               style={{ width: '100%', height: '320px', borderRadius: '6px', objectFit: 'cover' }}
@@ -157,7 +168,10 @@ function ActiveCard() {
               </Box>
 
               {/* Feature 03: Xử lý mô tả của Card */}
-              <CardDescriptionMdEditor />
+              <CardDescriptionMdEditor
+                cardDescriptionProp={activeCard?.description}
+                handleUpdateCardDescriptionChange={onUpdateCardDescription}
+              />
             </Box>
 
             <Box sx={{ mb: 3 }}>
