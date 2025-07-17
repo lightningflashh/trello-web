@@ -34,6 +34,24 @@ export const activeBoardSlice = createSlice({
 
       // Update the current active board
       state.currentActiveBoard = fullBoard
+    },
+    updateCardInBoard: (state, action) => {
+      const incomingCard = action.payload
+
+      // column > board > card
+      const column = state.currentActiveBoard.columns.find(column =>
+        column._id === incomingCard.columnId
+      )
+      if (column) {
+        const card = column.cards.find(card => card._id === incomingCard._id)
+        if (card) {
+          // Update the card details
+          Object.assign(card, incomingCard)
+          // Object.keys(incomingCard).forEach(key => {
+          //   card[key] = incomingCard[key]
+          // })
+        }
+      }
     }
   },
   // extraReducers --> handle asynchronous data
@@ -42,6 +60,9 @@ export const activeBoardSlice = createSlice({
       .addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
         // action.payload --> this is the data returned from the API
         let board = action.payload
+
+        // Merge thành viên vào board
+        board.FE_allUsers = board.owners.concat(board.members)
 
         // Sắp xếp trước khi đưa dữ liệu xuống các component con
         board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
@@ -63,7 +84,7 @@ export const activeBoardSlice = createSlice({
 
 // Actions: Là nơi dành cho các component gọi bằng dispatch() để cập nhật dữ liệu thông qua reducer (synchronous data)
 // redux toolkit sẽ tự động tạo ra các action tương ứng với các reducer
-export const { updateCurrentActiveBoard } = activeBoardSlice.actions
+export const { updateCurrentActiveBoard, updateCardInBoard } = activeBoardSlice.actions
 
 // Selectors: Là nơi dành cho các component gọi bằng hook useSelector() để lấy dữ liệu từ state (synchronous data)
 export const selectCurrentActiveBoard = (state) => state.activeBoard.currentActiveBoard

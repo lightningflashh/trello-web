@@ -12,7 +12,18 @@ import AttachmentIcon from '@mui/icons-material/Attachment'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
+import { useDispatch } from 'react-redux'
+import { updateCurrentActiveCard,showModalActiveCard } from '~/redux/activeCard/activeCardSlice'
+
 const Card = ({ card }) => {
+  const dispatch = useDispatch()
+
+  const handleCardClick = () => {
+    // Dispatch action to update the current active card in Redux
+    dispatch(updateCurrentActiveCard(card))
+    // Show the modal for the active card
+    dispatch(showModalActiveCard())
+  }
   const shouldCardActions = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
@@ -24,6 +35,7 @@ const Card = ({ card }) => {
 
   return (
     <MuiCard
+      onClick={handleCardClick}
       ref={setNodeRef} {...attributes} {...listeners}
       sx={{
         cursor: 'pointer',

@@ -9,7 +9,6 @@ import {
   updateColumnDetailsAPI,
   moveCardToDifferentColumnAPI } from '~/apis'
 
-
 import { fetchBoardDetailsAPI, updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -18,10 +17,12 @@ import { useParams } from 'react-router-dom'
 import { cloneDeep } from 'lodash'
 
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner'
+import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard'
 
 const Board = () => {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+
   const { boardId } = useParams()
 
   useEffect(() => {
@@ -78,6 +79,8 @@ const Board = () => {
   return (
     <>
       <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+        {/* Modal Active Card, check đóng/mở dựa theo state isShowModalActiveCard trong Redux */}
+        <ActiveCard />
         <AppBar/>
         <BoardBar board={board}/>
         <BoardContent
