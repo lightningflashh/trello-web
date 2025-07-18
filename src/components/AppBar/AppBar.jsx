@@ -24,6 +24,7 @@ import Recent from './Menus/Recent'
 import Started from './Menus/Started'
 import Templates from './Menus/Templates'
 import Profiles from './Menus/Profiles'
+import Notifications from '~/components/AppBar/Notifications/Notifications'
 
 
 const AppBar = () => {
@@ -48,17 +49,17 @@ const AppBar = () => {
       overflowX: 'auto',
       bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0')
     }}>
-      <Link to="/" style={{ color: 'inherit' }}>
-        <Box sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2
-        }}>
-          <Link to="/boards" style={{ color: 'inherit' }}>
-            <Tooltip title='Boards'>
-              <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
-            </Tooltip>
-          </Link>
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 2
+      }}>
+        <Link to="/boards" style={{ color: 'inherit' }}>
+          <Tooltip title='Boards'>
+            <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
+          </Tooltip>
+        </Link>
+        <Link to="/" style={{ color: 'inherit' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <SvgIcon
               component={TrelloLogoIcon}
@@ -67,20 +68,20 @@ const AppBar = () => {
             />
             <Typography variant='span' sx={{ fontSize: '1rem', fontWeight: 'bold', color: 'white' }}>Trello</Typography>
           </Box>
-          <Box sx={{ display: { xs: 'none', md:'flex' }, gap: 1 }}>
-            <WorkSpaces />
-            <Recent />
-            <Started />
-            <Templates />
-            <Button
-              variant='outlined'
-              startIcon={<LibraryAddIcon />}
-              sx={{ color: 'white' }}
-            >Create
-            </Button>
-          </Box>
+        </Link>
+        <Box sx={{ display: { xs: 'none', md:'flex' }, gap: 1 }}>
+          <WorkSpaces />
+          <Recent />
+          <Started />
+          <Templates />
+          <Button
+            variant='outlined'
+            startIcon={<LibraryAddIcon />}
+            sx={{ color: 'white' }}
+          >Create
+          </Button>
         </Box>
-      </Link>
+      </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <TextField
           id='outlined-search'
@@ -120,11 +121,7 @@ const AppBar = () => {
           }}
         />
         <ModeSelect />
-        <Tooltip title='Notifications'>
-          <Badge color='warning' variant='dot'sx={{ cursor: 'pointer' }}>
-            <NotificationsNoneIcon sx={{ color: 'white' }} />
-          </Badge>
-        </Tooltip>
+        <Notifications />
         <Tooltip title='Help'>
           <HelpOutlineIcon sx={{ color: 'white', cursor: 'pointer' }} />
         </Tooltip>
