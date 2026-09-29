@@ -27,22 +27,28 @@ const AppBar = () => {
       width: '100%',
       height: (theme) => theme.trello.appBarHeight,
       display: 'flex',
+      position: 'sticky',
+      top: 0,
       alignItems: 'center',
       justifyContent: 'space-between',
       gap: 2,
       overflowX: 'auto',
-      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0')
-    }}>
+      bgcolor: (theme) => 
+        theme.palette.mode === 'dark' 
+          ? 'rgba(44, 62, 80, 0.9)' 
+          : 'rgba(21, 101, 192, 0.9)',
+          backdropFilter: 'blur(8px)'
+      }}>
       <Box sx={{
         display: 'flex',
         alignItems: 'center',
         gap: 2
       }}>
-        <Link to="/boards" style={{ color: 'inherit' }}>
+        {/* <Link to="/boards" style={{ color: 'inherit' }}>
           <Tooltip title='Boards'>
             <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
           </Tooltip>
-        </Link>
+        </Link> */}
         <Link to="/" style={{ color: 'inherit' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <SvgIcon
