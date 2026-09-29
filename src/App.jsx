@@ -25,7 +25,7 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={
-        <Navigate to='/boards/68639eea385e6f83eb4ac36d' replace={true} />
+        <Navigate to='/boards' replace={true} />
       } />
 
       {/** Protected Routes */}

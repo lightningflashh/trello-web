@@ -19,7 +19,7 @@ import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
 import { Link, useLocation } from 'react-router-dom'
 import randomColor from 'randomcolor'
-import SidebarCreateBoardModal from './create'
+import SidebarCreateBoardModal from '~/pages/Boards/create'
 
 import { fetchBoardsAPI } from '~/apis'
 import { DEFAULT_PAGE, DEFAULT_ITEMS_PER_PAGE } from '~/utils/constants'
@@ -179,14 +179,28 @@ function Boards() {
               <Box sx={{ my: 3, pr: 5, display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                 <Pagination
                   size="large"
-                  color="secondary"
                   showFirstButton
                   showLastButton
-                  // Giá trị prop count của component Pagination là để hiển thị tổng số lượng page, công thức là lấy Tổng số lượng bản ghi chia cho số lượng bản ghi muốn hiển thị trên 1 page (ví dụ thường để 12, 24, 26, 48...vv). sau cùng là làm tròn số lên bằng hàm Math.ceil
                   count={Math.ceil(totalBoards / DEFAULT_ITEMS_PER_PAGE )}
-                  // Giá trị của page hiện tại đang đứng
                   page={page}
-                  // Render các page item và đồng thời cũng là những cái link để chúng ta click chuyển trang
+                  sx={{
+                    // Style chung cho các nút trang
+                    '& .MuiPaginationItem-root': {
+                      color: (theme) => (theme.palette.mode === 'dark' ? '#eceff1' : '#2c3e50'),
+                      '&:hover': {
+                        bgcolor: (theme) => (theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)')
+                      }
+                    },
+                    // Style riêng cho nút TRANG HIỆN TẠI đang chọn (.Mui-selected)
+                    '& .MuiPaginationItem-root.Mui-selected': {
+                      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2980b9' : '#1565c0'),
+                      color: '#ffffff',
+                      fontWeight: 'bold',
+                      '&:hover': {
+                        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#3498db' : '#1976d2')
+                      }
+                    }
+                  }}
                   renderItem={(item) => (
                     <PaginationItem
                       component={Link}

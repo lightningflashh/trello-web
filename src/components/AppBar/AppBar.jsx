@@ -12,11 +12,11 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import { ReactComponent as TrelloLogoIcon } from '~/assets/trello.svg'
 
-import WorkSpaces from './Menus/WorkSpaces'
-import Recent from './Menus/Recent'
-import Started from './Menus/Started'
-import Templates from './Menus/Templates'
-import Profiles from './Menus/Profiles'
+import WorkSpaces from '~/components/AppBar/Menus/WorkSpaces'
+import Recent from '~/components/AppBar/Menus/Recent'
+import Started from '~/components/AppBar/Menus/Started'
+import Templates from '~/components/AppBar/Menus/Templates'
+import Profiles from '~/components/AppBar/Menus/Profiles'
 import Notifications from '~/components/AppBar/Notifications/Notifications'
 import AutoCompleteSearchBoard from '~/components/AppBar/SearchBoards/AutoCompleteSearchBoard'
 
@@ -27,22 +27,28 @@ const AppBar = () => {
       width: '100%',
       height: (theme) => theme.trello.appBarHeight,
       display: 'flex',
+      position: 'sticky',
+      top: 0,
       alignItems: 'center',
       justifyContent: 'space-between',
       gap: 2,
       overflowX: 'auto',
-      bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0')
-    }}>
+      bgcolor: (theme) => 
+        theme.palette.mode === 'dark' 
+          ? 'rgba(44, 62, 80, 0.9)' 
+          : 'rgba(21, 101, 192, 0.9)',
+          backdropFilter: 'blur(8px)'
+      }}>
       <Box sx={{
         display: 'flex',
         alignItems: 'center',
         gap: 2
       }}>
-        <Link to="/boards" style={{ color: 'inherit' }}>
+        {/* <Link to="/boards" style={{ color: 'inherit' }}>
           <Tooltip title='Boards'>
             <AppsIcon sx={{ color: 'white', verticalAlign: 'middle' }} />
           </Tooltip>
-        </Link>
+        </Link> */}
         <Link to="/" style={{ color: 'inherit' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <SvgIcon

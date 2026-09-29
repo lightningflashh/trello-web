@@ -29,9 +29,9 @@ import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
 import { singleFileValidator } from '~/utils/validators'
 import { toast } from 'react-toastify'
-import CardUserGroup from './CardUserGroup'
-import CardDescriptionMdEditor from './CardDescriptionMdEditor'
-import CardActivitySection from './CardActivitySection'
+import CardUserGroup from '~/components/Modal/ActiveCard/CardUserGroup'
+import CardDescriptionMdEditor from '~/components/Modal/ActiveCard/CardDescriptionMdEditor'
+import CardActivitySection from '~/components/Modal/ActiveCard/CardActivitySection'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   clearAndHideCurrentActiveCard,

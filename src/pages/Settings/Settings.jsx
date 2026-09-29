@@ -9,8 +9,8 @@ import TabPanel from '@mui/lab/TabPanel'
 import SecurityIcon from '@mui/icons-material/Security'
 import PersonIcon from '@mui/icons-material/Person'
 import { Link, useLocation } from 'react-router-dom'
-import AccountTab from './AccountTab'
-import SecurityTab from './SecurityTab'
+import AccountTab from '~/pages/Settings/AccountTab.jsx'
+import SecurityTab from '~/pages/Settings/SecurityTab'
 
 // Khai báo đống tabs ra biến const để dùng lại cho gọn
 const TABS = {

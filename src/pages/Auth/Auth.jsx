@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import Box from '@mui/material/Box'
-import LoginForm from './LoginForm'
-import RegisterForm from './RegisterForm'
+import LoginForm from '~/pages/Auth/LoginForm'
+import RegisterForm from '~/pages/Auth/RegisterForm'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 
