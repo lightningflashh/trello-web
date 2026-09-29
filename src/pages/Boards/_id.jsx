@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
 import AppBar from '~/components/AppBar/AppBar'
-import BoardBar from './BoardBar/BoardBar'
-import BoardContent from './BoardContent/BoardContent'
+import BoardBar from '~/pages/Boards/BoardBar/BoardBar'
+import BoardContent from '~/pages/Boards/BoardContent/BoardContent'
 import Container from '@mui/material/Container'
 import {
   updateBoardDetailsAPI,

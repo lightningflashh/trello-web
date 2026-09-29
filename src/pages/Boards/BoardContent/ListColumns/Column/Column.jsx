@@ -32,7 +32,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-import ListCards from './ListCards/ListCards'
+import ListCards from '~/pages/Boards/BoardContent/ListColumns/Column/ListCards/ListCards'
 import theme from '~/theme'
 
 import { useConfirm } from 'material-ui-confirm'

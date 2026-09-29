@@ -11,7 +11,7 @@ import { cloneDeep } from 'lodash'
 import { updateCurrentActiveBoard, selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 
 import Button from '@mui/material/Button'
-import Column from './Column/Column'
+import Column from '~/pages/Boards/BoardContent/ListColumns/Column/Column'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
 

@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 
 import Box from '@mui/material/Box'
 
-import ListColumns from './ListColumns/ListColumns'
+import ListColumns from '~/pages/Boards/BoardContent/ListColumns/ListColumns'
 
 import {
   DndContext,
@@ -17,8 +17,8 @@ import {
 
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensors'
 
-import Column from './ListColumns/Column/Column'
-import Card from './ListColumns/Column/ListCards/Card/Card'
+import Column from '~/pages/Boards/BoardContent/ListColumns/Column/Column'
+import Card from '~/pages/Boards/BoardContent/ListColumns/Column/ListCards/Card/Card'
 
 import { arrayMove } from '@dnd-kit/sortable'
 import { cloneDeep, isEmpty } from 'lodash'

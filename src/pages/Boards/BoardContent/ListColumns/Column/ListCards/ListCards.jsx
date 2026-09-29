@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box'
-import Card from './Card/Card'
+import Card from '~/pages/Boards/BoardContent/ListColumns/Column/ListCards/Card/Card'
 
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
