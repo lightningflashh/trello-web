@@ -11,11 +11,6 @@ function Auth() {
   const isLogin = location.pathname === '/login'
   const isRegister = location.pathname === '/register'
 
-  // const currentUser = useSelector(selectCurrentUser)
-  // if (currentUser) {
-  //   return <Navigate to='/' replace={true} />
-  // }
-
   return (
     <Box sx={{
       display: 'flex',
@@ -27,7 +22,7 @@ function Auth() {
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      boxShadow: 'inset 0 0 0 2000px rgba(0, 0, 0, 0.2)'
+      boxShadow: 'inset 0 0 0 2000px rgba(255, 255, 255, 0.1)'
     }}>
       {isLogin && <LoginForm />}
       {isRegister && <RegisterForm />}
