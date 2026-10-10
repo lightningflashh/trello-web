@@ -25,11 +25,11 @@ function Auth() {
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
-      boxShadow: 'inset 0 0 0 2000px rgba(255, 255, 255, 0.3)',
     }}>
       {isLogin && <LoginForm />}
       {isRegister && <RegisterForm />}
       <Box sx={{
+        display: { xs: 'none', md: 'block' },
         position: 'fixed',
         bottom: 0,
         left: 0,
@@ -45,10 +45,11 @@ function Auth() {
       }} />
 
       <Box sx={{
+        display: { xs: 'none', md: 'block' },
         position: 'fixed',
         bottom: 0,
         right: 0,
-        width: '512px',
+        width: '500px',
         height: '500px',
         background: `url("${questionImage}")`,
         backgroundRepeat: 'no-repeat',
