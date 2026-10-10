@@ -14,6 +14,8 @@ import { useForm } from 'react-hook-form'
 
 import { useSearchParams, useNavigate } from 'react-router-dom'
 
+import googleIcon from '~/assets/auth/google-icon.png'
+
 import {
   FIELD_REQUIRED_MESSAGE,
   EMAIL_RULE,
@@ -189,6 +191,7 @@ const LoginForm = () => {
                     },
                   }}
                 />
+                <FieldErrorAlert errors={errors} fieldName={'password'}/>
               </Box>
           </Box>
           <CardActions sx={{ padding: '0 1em 1em 1em' }}>
@@ -212,14 +215,14 @@ const LoginForm = () => {
               Login
             </Button>
           </CardActions>
-   <      Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center', color: 'black' }}>
+          <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center', color: 'black' }}>
             Or login with:
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, marginTop: '0.5em' }}>
               <Button 
                 variant="outlined" 
                 size="large" 
                 fullWidth
-                startIcon={<img src="src/assets/auth/google-icon.png" alt="Google" style={{ width: '20px', height: '20px' }} />}
+                startIcon={<img src={googleIcon} alt="Google" style={{ width: '20px', height: '20px' }} />}
                 sx={{ textTransform: 'none', color: '#172B4D',
                       borderColor: '#dfe1e6',
                       '&:hover': {
@@ -229,23 +232,6 @@ const LoginForm = () => {
                     }}
               >
                 Google
-              </Button>
-
-              <Button 
-                variant="outlined" 
-                color="inherit" 
-                size="large" 
-                fullWidth
-                startIcon={<img src="src/assets/auth/github-icon.png" alt="Github" style={{ width: '20px', height: '20px' }} />}
-                sx={{ textTransform: 'none', color: '#172B4D',
-                      borderColor: '#dfe1e6',
-                      '&:hover': {
-                        borderColor: '#c1c7d0',
-                        backgroundColor: '#f4f5f7',
-                      } 
-                    }}
-              >
-                Github
               </Button>
             </Box>
           </Box>

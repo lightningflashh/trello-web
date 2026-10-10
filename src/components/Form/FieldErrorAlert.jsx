@@ -1,10 +1,26 @@
 import Alert from '@mui/material/Alert'
 
-// Component này có nhiệm vụ trả về một Alert Message cho field chỉ định (nếu có).
 const FieldErrorAlert = ({ errors, fieldName }) => {
   if (!errors || !errors[fieldName]) return null
   return (
-    <Alert severity="error" sx={{ mt: '0.7em', '.MuiAlert-message': { overflow: 'hidden' } }}>
+    <Alert 
+      severity="error" 
+      sx={{ 
+        mt: '0.7em', 
+        backgroundColor: '#FFEBE6', 
+        color: '#DE350B',
+        
+        '& .MuiAlert-icon': {
+          color: '#DE350B',
+        },
+        
+        '& .MuiAlert-message': { 
+          overflow: 'hidden',
+          color: '#DE350B',
+          fontWeight: 500,
+        } 
+      }}
+    >
       {errors[fieldName]?.message}
     </Alert>
   )
