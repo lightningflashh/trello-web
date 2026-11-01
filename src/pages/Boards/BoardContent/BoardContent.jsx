@@ -33,7 +33,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 const BoardContent = ({ board,
   moveColumns,
   moveCardInAColumn,
-  moveCardToDifferentColumn,
+  moveCardToDifferentColumn
 }) => {
   // const pointerSensor = useSensor(PointerSensor, {
   //   activationConstraint: { distance: 10 }
@@ -210,7 +210,7 @@ const BoardContent = ({ board,
 
       if (!activeColumn || !overColumn) return
 
-      // Không được dùng activeDragItemData._id vì khi kéo sang một column khác thì activeDragItemData sẽ không có cập nhật lại cái columnId mới 
+      // Không được dùng activeDragItemData._id vì khi kéo sang một column khác thì activeDragItemData sẽ không có cập nhật lại cái columnId mới
       // => Nó sẽ rơi vào trường hợp kéo thả trong cùng một column
       if (oldColumnWhenDraggingCard._id !== overColumn._id) {
         moveCardBetweenDifferentColumns(

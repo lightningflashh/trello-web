@@ -13,7 +13,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 import { useDispatch } from 'react-redux'
-import { updateCurrentActiveCard,showModalActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { updateCurrentActiveCard, showModalActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Card = ({ card }) => {
   const dispatch = useDispatch()

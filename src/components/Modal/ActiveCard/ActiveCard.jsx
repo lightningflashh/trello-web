@@ -32,6 +32,7 @@ import { toast } from 'react-toastify'
 import CardUserGroup from '~/components/Modal/ActiveCard/CardUserGroup'
 import CardDescriptionMdEditor from '~/components/Modal/ActiveCard/CardDescriptionMdEditor'
 import CardActivitySection from '~/components/Modal/ActiveCard/CardActivitySection'
+import CardAttachments from '~/components/Modal/ActiveCard/CardAttachments'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   clearAndHideCurrentActiveCard,
@@ -39,7 +40,8 @@ import {
   updateCurrentActiveCard,
   selectIsShowModalActiveCard
 } from '~/redux/activeCard/activeCardSlice'
-import { updateCardDetailsAPI } from '~/apis'
+import { fetchCardAttachments } from '~/redux/attachments/attachmentSlice'
+import { updateCardDetailsAPI, attachFileToCardAPI } from '~/apis'
 import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 
@@ -84,6 +86,12 @@ function ActiveCard() {
     return updatedCard
   }
 
+  const callApiAttachFileToCard = async (cardId, formData) => {
+    const updatedCard = await attachFileToCardAPI(cardId, formData)
+    dispatch(fetchCardAttachments(cardId)) // Cập nhật lại danh sách attachments trong Redux
+    return updatedCard
+  }
+
   const onUpdateCardTitle = (newTitle) => {
     callApiUpdateCard({ title: newTitle.trim() })
   }
@@ -110,6 +118,56 @@ function ActiveCard() {
       }
     )
   }
+
+  const onUploadCardAttachment = (event) => {
+    const error = singleFileValidator(event.target?.files[0])
+    if (error) {
+      toast.error(error)
+      return
+    }
+    let reqData = new FormData()
+    reqData.append('attachment', event.target?.files[0])
+
+    // Gọi API...
+    toast.promise(
+      callApiAttachFileToCard(activeCard._id, reqData).finally(() => event.target.value = '' // Reset lại input file sau khi upload thành công
+      ),
+      {
+        pending: 'Uploading card attachment...'
+      }
+    )
+  }
+
+  // const onUploadCardAttachment = (event) => {
+  //   const file = event.target?.files?.[0]
+
+  //   if (!file) return
+
+  //   // 1. Validate file
+  //   const error = singleFileValidator(file)
+
+  //   if (error) {
+  //     toast.error(error)
+  //     event.target.value = ''
+  //     return
+  //   }
+
+  //   // 2. Tạo FormData
+  //   const reqData = new FormData()
+  //   reqData.append('attachment', file)
+
+  //   // 3. Upload file
+  //   toast.promise(
+  //     callApiAttachFileToCard(activeCard._id, reqData).finally(() => {
+  //       event.target.value = ''
+  //     }),
+  //     {
+  //       pending: 'Uploading card attachment...',
+  //       success: 'File uploaded successfully!',
+  //       error: 'Failed to upload file.'
+  //     }
+  //   )
+  // }
 
   // Dùng async await để đảm bảo component CardActivitySection chờ và nếu thành công mới clear thẻ input comment
   const onAddCardComment = async (commentToAdd) => {
@@ -194,6 +252,13 @@ function ActiveCard() {
             </Box>
 
             <Box sx={{ mb: 3 }}>
+              <CardAttachments
+                cardId={activeCard?._id}
+                handleUploadAttachment={onUploadCardAttachment}
+              />
+            </Box>
+
+            <Box sx={{ mb: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                 <DvrOutlinedIcon />
                 <Typography variant="span" sx={{ fontWeight: '600', fontSize: '20px' }}>Activity</Typography>
@@ -243,7 +308,11 @@ function ActiveCard() {
                 <VisuallyHiddenInput type="file" onChange={onUploadCardCover} />
               </SidebarItem>
 
-              <SidebarItem><AttachFileOutlinedIcon fontSize="small" />Attachment</SidebarItem>
+              <SidebarItem className="active" component="label">
+                <AttachFileOutlinedIcon fontSize="small" />
+                Attachment
+                <VisuallyHiddenInput type="file" onChange={onUploadCardAttachment} />
+              </SidebarItem>
               <SidebarItem><LocalOfferOutlinedIcon fontSize="small" />Labels</SidebarItem>
               <SidebarItem><TaskAltOutlinedIcon fontSize="small" />Checklist</SidebarItem>
               <SidebarItem><WatchLaterOutlinedIcon fontSize="small" />Dates</SidebarItem>

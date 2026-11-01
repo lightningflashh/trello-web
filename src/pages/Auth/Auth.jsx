@@ -24,7 +24,7 @@ function Auth() {
       background: `url("${bgImage}")`,
       backgroundRepeat: 'no-repeat',
       backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      backgroundPosition: 'center'
     }}>
       {isLogin && <LoginForm />}
       {isRegister && <RegisterForm />}
@@ -41,7 +41,7 @@ function Auth() {
         backgroundSize: 'contain',
         backgroundPosition: 'bottom right',
         zIndex: 0,
-        pointerEvents: 'none',
+        pointerEvents: 'none'
       }} />
 
       <Box sx={{
@@ -56,7 +56,7 @@ function Auth() {
         backgroundSize: 'contain',
         backgroundPosition: 'bottom left',
         zIndex: 0,
-        pointerEvents: 'none',
+        pointerEvents: 'none'
       }} />
     </Box>
   )
