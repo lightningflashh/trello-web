@@ -15,7 +15,9 @@ const initialState = {
 export const fetchBoardDetailsAPI = createAsyncThunk(
   'activeBoard/fetchBoardDetailsAPI',
   async (boardId) => {
-    const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards/${boardId}`)
+    const response = await authorizedAxiosInstance.get(
+      `${API_ROOT}/v1/boards/${boardId}`
+    )
     // response.data sẽ là dữ liệu trả về từ API
     return response.data
   }
@@ -39,11 +41,11 @@ export const activeBoardSlice = createSlice({
       const incomingCard = action.payload
 
       // column > board > card
-      const column = state.currentActiveBoard.columns.find(column =>
-        column._id === incomingCard.columnId
+      const column = state.currentActiveBoard.columns.find(
+        (column) => column._id === incomingCard.columnId
       )
       if (column) {
-        const card = column.cards.find(card => card._id === incomingCard._id)
+        const card = column.cards.find((card) => card._id === incomingCard._id)
         if (card) {
           // Update the card details
           Object.assign(card, incomingCard)
@@ -56,38 +58,39 @@ export const activeBoardSlice = createSlice({
   },
   // extraReducers --> handle asynchronous data
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
-        // action.payload --> this is the data returned from the API
-        let board = action.payload
+    builder.addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
+      // action.payload --> this is the data returned from the API
+      let board = action.payload
 
-        // Merge thành viên vào board
-        board.FE_allUsers = board.owners.concat(board.members)
+      // Merge thành viên vào board
+      board.FE_allUsers = board.owners.concat(board.members)
 
-        // Sắp xếp trước khi đưa dữ liệu xuống các component con
-        board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
+      // Sắp xếp trước khi đưa dữ liệu xuống các component con
+      board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
 
-        board.columns.forEach(column => {
-          if (isEmpty(column.cards)) {
-            column.cards = [generatePlaceholderCard(column)]
-            column.cardOrderIds = [generatePlaceholderCard(column)._id]
-          } else {
-            // Sắp xếp các thẻ trong mỗi cột theo thứ tự đã lưu trước khi đưa xuống component con
-            column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
-          }
-        })
-
-        state.currentActiveBoard = board
+      board.columns.forEach((column) => {
+        if (isEmpty(column.cards)) {
+          column.cards = [generatePlaceholderCard(column)]
+          column.cardOrderIds = [generatePlaceholderCard(column)._id]
+        } else {
+          // Sắp xếp các thẻ trong mỗi cột theo thứ tự đã lưu trước khi đưa xuống component con
+          column.cards = mapOrder(column.cards, column.cardOrderIds, '_id')
+        }
       })
+
+      state.currentActiveBoard = board
+    })
   }
 })
 
 // Actions: Là nơi dành cho các component gọi bằng dispatch() để cập nhật dữ liệu thông qua reducer (synchronous data)
 // redux toolkit sẽ tự động tạo ra các action tương ứng với các reducer
-export const { updateCurrentActiveBoard, updateCardInBoard } = activeBoardSlice.actions
+export const { updateCurrentActiveBoard, updateCardInBoard } =
+  activeBoardSlice.actions
 
 // Selectors: Là nơi dành cho các component gọi bằng hook useSelector() để lấy dữ liệu từ state (synchronous data)
-export const selectCurrentActiveBoard = (state) => state.activeBoard.currentActiveBoard
+export const selectCurrentActiveBoard = (state) =>
+  state.activeBoard.currentActiveBoard
 
 // cần export reducer để redux toolkit có thể sử dụng
 export default activeBoardSlice.reducer

@@ -4,13 +4,22 @@ export const FIELD_REQUIRED_MESSAGE = 'This field is required.'
 export const EMAIL_RULE = /^\S+@\S+\.\S+$/
 export const EMAIL_RULE_MESSAGE = 'Email is invalid. (email@example.com)'
 export const PASSWORD_RULE = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d\W]{8,256}$/
-export const PASSWORD_RULE_MESSAGE = 'Password must include at least 1 letter, a number, and at least 8 characters.'
-export const PASSWORD_CONFIRMATION_MESSAGE = 'Password Confirmation does not match!'
-
+export const PASSWORD_RULE_MESSAGE =
+  'Password must include at least 1 letter, a number, and at least 8 characters.'
+export const PASSWORD_CONFIRMATION_MESSAGE =
+  'Password Confirmation does not match!'
 
 // Liên quan đến Validate File
 export const LIMIT_COMMON_FILE_SIZE = 10485760 // byte = 10 MB
-export const ALLOW_COMMON_FILE_TYPES = ['image/jpg', 'image/jpeg', 'image/png']
+export const ALLOW_COMMON_FILE_TYPES = [
+  'image/jpg',
+  'image/jpeg',
+  'image/png',
+  'application/pdf',
+  'text/plain',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+]
 export const singleFileValidator = (file) => {
   if (!file || !file.name || !file.size || !file.type) {
     return 'File cannot be blank.'
@@ -19,7 +28,7 @@ export const singleFileValidator = (file) => {
     return 'Maximum file size exceeded. (10MB)'
   }
   if (!ALLOW_COMMON_FILE_TYPES.includes(file.type)) {
-    return 'File type is invalid. Only accept jpg, jpeg and png'
+    return 'File type is invalid. Only accept jpg, jpeg, png, pdf, txt, doc, docx.'
   }
   return null
 }

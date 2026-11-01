@@ -18,7 +18,9 @@ import { logoutUserAPI } from '~/redux/user/userSlice'
  */
 
 let axiosReduxStore
-export const injectStore = mainStore => { axiosReduxStore = mainStore }
+export const injectStore = (mainStore) => {
+  axiosReduxStore = mainStore
+}
 
 let authorizedAxiosInstance = axios.create()
 
@@ -27,24 +29,41 @@ authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10
 // Sẽ cho phép axios gửi cookie trong request lên server (lưu trữ token vào trong httpOnly cookie)
 authorizedAxiosInstance.defaults.withCredentials = true
 
-authorizedAxiosInstance.interceptors.request.use((config) => {
-  interceptorLoadingElements(true) // Bật loading cho tất cả các request tránh double click
-  return config
-}, (error) => {
-  // Do something with request error
-  return Promise.reject(error)
-})
+// authorizedAxiosInstance.interceptors.request.use((config) => {
+//   interceptorLoadingElements(true) // Bật loading cho tất cả các request tránh double click
+//   return config
+// }, (error) => {
+//   // Do something with request error
+//   return Promise.reject(error)
+// })
+
+authorizedAxiosInstance.interceptors.request.use(
+  (config) => {
+    interceptorLoadingElements(true) // Bật loading cho tất cả các request
+
+    // QUAN TRỌNG: Nếu dữ liệu gửi lên là FormData (upload file/avatar/attachment),
+    // ta phải xóa trắng hoặc không để Content-Type bị gán đè,
+    // để trình duyệt tự động thêm multipart/form-data kèm boundary của nó.
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type']
+    }
+
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 /* * Khởi tạo một cái promise cho việc gọi api refresh_token
-* Mục đích tạo promise này là để khi gọi api refresh_token rồi mới retry lại nhiều api bị lỗi trước đó
+ * Mục đích tạo promise này là để khi gọi api refresh_token rồi mới retry lại nhiều api bị lỗi trước đó
  */
-let refreshTokenPromise =
-
-
-  authorizedAxiosInstance.interceptors.response.use((response) => {
+let refreshTokenPromise = authorizedAxiosInstance.interceptors.response.use(
+  (response) => {
     interceptorLoadingElements(false) // Tắt loading khi có response trả về
     return response
-  }, (error) => {
+  },
+  (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
 
@@ -86,7 +105,7 @@ let refreshTokenPromise =
 
       // Cần return trường hợp refreshTokenPromise chạy thành công và xử lý thêm ở đây:
       // eslint-disable-next-line no-unused-vars
-      return refreshTokenPromise.then(accessToken => {
+      return refreshTokenPromise.then((accessToken) => {
         /**
          * Bước 1: Đối với Trường hợp nếu dự án cần lưu accessToken vào localStorage hoặc đâu đó thì sẽ viết thêm code xử lý ở đây.
          * → Hiện tại ở đây không cần bước 1 này vì chúng ta đã đưa accessToken vào cookie (xử lý từ phía BE)
@@ -108,6 +127,7 @@ let refreshTokenPromise =
       toast.error(errorMessage)
     }
     return Promise.reject(error)
-  })
+  }
+)
 
 export default authorizedAxiosInstance

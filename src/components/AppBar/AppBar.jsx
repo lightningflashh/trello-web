@@ -32,12 +32,12 @@ const AppBar = () => {
       justifyContent: 'space-between',
       gap: 2,
       overflowX: 'auto',
-      bgcolor: (theme) => 
-        theme.palette.mode === 'dark' 
-          ? 'rgba(44, 62, 80, 0.9)' 
+      bgcolor: (theme) =>
+        theme.palette.mode === 'dark'
+          ? 'rgba(44, 62, 80, 0.9)'
           : 'rgba(21, 101, 192, 0.9)',
-          backdropFilter: 'blur(8px)'
-      }}>
+      backdropFilter: 'blur(8px)'
+    }}>
       <Box sx={{
         display: 'flex',
         alignItems: 'center',

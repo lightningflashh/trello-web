@@ -4,34 +4,51 @@ import { API_ROOT } from '~/utils/constants'
 import { toast } from 'react-toastify'
 
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
-  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/${boardId}`, updateData)
+  const response = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/boards/${boardId}`,
+    updateData
+  )
   return response.data
 }
 
 export const moveCardToDifferentColumnAPI = async (updateData) => {
-  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/supports/moving_card`, updateData)
+  const response = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/boards/supports/moving_card`,
+    updateData
+  )
   return response.data
 }
 
 /* column APIs */
 export const createNewColumnAPI = async (columnData) => {
-  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/columns`, columnData)
+  const response = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/columns`,
+    columnData
+  )
   return response.data
 }
 
 export const updateColumnDetailsAPI = async (columnId, updateData) => {
-  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/columns/${columnId}`, updateData)
+  const response = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/columns/${columnId}`,
+    updateData
+  )
   return response.data
 }
 
 export const deleteColumnDetailsAPI = async (columnId) => {
-  const response = await authorizedAxiosInstance.delete(`${API_ROOT}/v1/columns/${columnId}`)
+  const response = await authorizedAxiosInstance.delete(
+    `${API_ROOT}/v1/columns/${columnId}`
+  )
   return response.data
 }
 
 /* card APIs */
 export const createNewCardAPI = async (cardData) => {
-  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/cards`, cardData)
+  const response = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/cards`,
+    cardData
+  )
   return response.data
 }
 
@@ -65,28 +82,69 @@ export const verifyUserAPI = async (data) => {
 }
 
 export const refreshTokenAPI = async () => {
-  const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/users/refresh_token`)
+  const response = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/users/refresh_token`
+  )
   return response.data
 }
 
 export const fetchBoardsAPI = async (searchPath) => {
-  const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards${searchPath}`)
+  const response = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/boards${searchPath}`
+  )
   return response.data
 }
 
 export const createNewBoardAPI = async (boardData) => {
-  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/boards`, boardData)
+  const response = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/boards`,
+    boardData
+  )
   toast.success('Board created successfully!')
   return response.data
 }
 
 export const updateCardDetailsAPI = async (cardId, updateData) => {
-  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, updateData)
+  const response = await authorizedAxiosInstance.put(
+    `${API_ROOT}/v1/cards/${cardId}`,
+    updateData
+  )
   return response.data
 }
 
 export const inviteUserToBoardAPI = async (data) => {
-  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/invitations/board`, data)
+  const response = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/invitations/board`,
+    data
+  )
   toast.success('User invited successfully!')
+  return response.data
+}
+
+export const attachFileToCardAPI = async (cardId, formData) => {
+  const response = await authorizedAxiosInstance.post(
+    `${API_ROOT}/v1/cards/${cardId}/attachments`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+  )
+  toast.success('File attached successfully!')
+  return response.data
+}
+
+export const getCardAttachmentsAPI = async (cardId) => {
+  const response = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/cards/${cardId}/attachments`
+  )
+  return response.data
+}
+
+export const fetchCurrentUserAPI = async () => {
+  const response = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/users/current`
+  )
   return response.data
 }

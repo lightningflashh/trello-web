@@ -98,7 +98,7 @@ function CardUserGroup({ cardMemberIds = [], onUpdateCardMembers }) {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 badgeContent={
                   cardMemberIds.includes(user._id)
-                    ? <CheckCircleIcon fontSize="small" sx={{ color: '#27ae60' }} /> 
+                    ? <CheckCircleIcon fontSize="small" sx={{ color: '#27ae60' }} />
                     : null
                 }
                 onClick={handleUpdateCardMembers(user)}

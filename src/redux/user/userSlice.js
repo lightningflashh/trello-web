@@ -11,7 +11,10 @@ const initialState = {
 export const loginUserAPI = createAsyncThunk(
   'user/loginUserAPI',
   async (credentials) => {
-    const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/users/login`, credentials)
+    const response = await authorizedAxiosInstance.post(
+      `${API_ROOT}/v1/users/login`,
+      credentials
+    )
     // response.data sẽ là dữ liệu trả về từ API
     return response.data
   }
@@ -20,7 +23,9 @@ export const loginUserAPI = createAsyncThunk(
 export const logoutUserAPI = createAsyncThunk(
   'user/logoutUserAPI',
   async (showSuccessMessage = true) => {
-    const response = await authorizedAxiosInstance.delete(`${API_ROOT}/v1/users/logout`)
+    const response = await authorizedAxiosInstance.delete(
+      `${API_ROOT}/v1/users/logout`
+    )
     if (showSuccessMessage) {
       toast.success('Logout successful')
     }
@@ -31,7 +36,10 @@ export const logoutUserAPI = createAsyncThunk(
 export const updateUserAPI = createAsyncThunk(
   'user/updateUserAPI',
   async (userData) => {
-    const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/users/update`, userData)
+    const response = await authorizedAxiosInstance.put(
+      `${API_ROOT}/v1/users/update`,
+      userData
+    )
     return response.data
   }
 )
@@ -39,27 +47,28 @@ export const updateUserAPI = createAsyncThunk(
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentUser: (state, action) => {
+      state.currentUser = action.payload
+    }
+  },
   extraReducers: (builder) => {
-    builder
-      .addCase(loginUserAPI.fulfilled, (state, action) => {
-        state.currentUser = action.payload
-      })
-    builder
-      .addCase(logoutUserAPI.fulfilled, (state) => {
-        // Xóa thông tin người dùng hiện tại khi đăng xuất
-        // Kết hợp Protected Route => Điều hướng về trang đăng nhập
-        state.currentUser = null
-      })
-    builder
-      .addCase(updateUserAPI.fulfilled, (state, action) => {
-        // Cập nhật thông tin người dùng hiện tại
-        state.currentUser = action.payload
-      })
+    builder.addCase(loginUserAPI.fulfilled, (state, action) => {
+      state.currentUser = action.payload
+    })
+    builder.addCase(logoutUserAPI.fulfilled, (state) => {
+      // Xóa thông tin người dùng hiện tại khi đăng xuất
+      // Kết hợp Protected Route => Điều hướng về trang đăng nhập
+      state.currentUser = null
+    })
+    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
+      // Cập nhật thông tin người dùng hiện tại
+      state.currentUser = action.payload
+    })
   }
 })
 
-// export const {} = userSlice.actions
+export const { setCurrentUser } = userSlice.actions
 
 export const selectCurrentUser = (state) => state.user.currentUser
 

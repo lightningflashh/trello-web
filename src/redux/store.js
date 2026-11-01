@@ -3,6 +3,7 @@ import activeBoardReducer from '~/redux/activeBoard/activeBoardSlice'
 import { userReducer } from '~/redux/user/userSlice'
 import { activeCardReducer } from '~/redux/activeCard/activeCardSlice'
 import { notificationsReducer } from '~/redux/notifications/notificationSlice'
+import { attachmentReducer } from '~/redux/attachments/attachmentSlice'
 
 import { combineReducers } from 'redux'
 import { persistReducer } from 'redux-persist'
@@ -19,6 +20,7 @@ const reducers = combineReducers({
   activeBoard: activeBoardReducer,
   user: userReducer,
   activeCard: activeCardReducer,
+  cardAttachment: attachmentReducer,
   notifications: notificationsReducer
 })
 
@@ -26,5 +28,6 @@ const persistedReducer = persistReducer(rootPersistConfig, reducers)
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false })
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false })
 })

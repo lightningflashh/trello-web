@@ -36,6 +36,12 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { useState } from 'react'
 
+import { API_ROOT } from '~/utils/constants.js'
+
+// import { fetchCurrentUserAPI } from '~/apis/index.js'
+// import { updateUserAPI, setIsLoading } from '~/redux/user/userSlice.js'
+// import { useEffect } from 'react'
+
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const dispatch = useDispatch()
@@ -44,13 +50,13 @@ const LoginForm = () => {
   const registeredEmail = searchParams.get('registeredEmail')
   const verifiedEmail = searchParams.get('verifiedEmail')
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+    event.preventDefault()
+  }
 
   const submitLogIn = (data) => {
     const { email, password } = data
@@ -67,6 +73,11 @@ const LoginForm = () => {
     })
   }
 
+  const handleGoogleLogin = () => {
+    toast.info('Redirecting to Google login...')
+    window.location.href = `${API_ROOT}/v1/users/auth/google`
+  }
+
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>
@@ -78,7 +89,7 @@ const LoginForm = () => {
             gap: 1
           }}>
           </Box>
-          <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1, fontFamily: "'Poppins', sans-serif", fontWeight: 'semi-bold', color: 'black', fontSize: '2rem' }}>
+          <Box sx={{ marginTop: '1em', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1, fontFamily: '\'Poppins\', sans-serif', fontWeight: 'semi-bold', color: 'black', fontSize: '2rem' }}>
             <Avatar variant="rounded" sx={{ bgcolor: '#0052CC', width: 40, height: 40, borderRadius: '10px' }}><TrelloIcon /></Avatar>
             Trello
           </Box>
@@ -140,59 +151,59 @@ const LoginForm = () => {
               <FieldErrorAlert errors={errors} fieldName={'email'}/>
             </Box>
             <Box sx={{ marginTop: '1em' }}>
-                <TextField
-                  fullWidth
-                  placeholder="Enter Password..."
-                  type={showPassword ? 'text' : 'password'}
-                  variant="outlined"
-                  error={!!errors['password']}
-                  {...register('password', {
-                    required: FIELD_REQUIRED_MESSAGE,
-                    pattern: {
-                      value: PASSWORD_RULE,
-                      message: PASSWORD_RULE_MESSAGE
+              <TextField
+                fullWidth
+                placeholder="Enter Password..."
+                type={showPassword ? 'text' : 'password'}
+                variant="outlined"
+                error={!!errors['password']}
+                {...register('password', {
+                  required: FIELD_REQUIRED_MESSAGE,
+                  pattern: {
+                    value: PASSWORD_RULE,
+                    message: PASSWORD_RULE_MESSAGE
+                  }
+                })}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                        sx={{ color: '#0052CC' }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+                sx={{
+                  '& .MuiInputBase-input': {
+                    color: '#172B4D'
+                  },
+                  '& .MuiInputLabel-root': {
+                    color: '#5E6C84',
+                    '&.Mui-focused': {
+                      color: '#0052CC'
                     }
-                  })}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                          edge="end"
-                          sx={{ color: '#0052CC' }} 
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{
-                    '& .MuiInputBase-input': {
-                      color: '#172B4D',
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#DFE1E6'
                     },
-                    '& .MuiInputLabel-root': {
-                      color: '#5E6C84',
-                      '&.Mui-focused': {
-                        color: '#0052CC',
-                      },
+                    '&:hover fieldset': {
+                      borderColor: '#0052CC'
                     },
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: '#DFE1E6',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#0052CC',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: '#0052CC',
-                      },
-                    },
-                  }}
-                />
-                <FieldErrorAlert errors={errors} fieldName={'password'}/>
-              </Box>
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#0052CC'
+                    }
+                  }
+                }}
+              />
+              <FieldErrorAlert errors={errors} fieldName={'password'}/>
+            </Box>
           </Box>
           <CardActions sx={{ padding: '0 1em 1em 1em' }}>
             <Button
@@ -202,8 +213,8 @@ const LoginForm = () => {
               color="primary"
               size="large"
               fullWidth
-              sx={{ 
-                textTransform: 'none', 
+              sx={{
+                textTransform: 'none',
                 fontWeight: 'bold',
                 color: '#ffffff',
                 backgroundColor: '#0052CC',
@@ -218,18 +229,19 @@ const LoginForm = () => {
           <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center', color: 'black' }}>
             Or login with:
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, marginTop: '0.5em' }}>
-              <Button 
-                variant="outlined" 
-                size="large" 
+              <Button
+                variant="outlined"
+                onClick={handleGoogleLogin}
+                size="large"
                 fullWidth
                 startIcon={<img src={googleIcon} alt="Google" style={{ width: '20px', height: '20px' }} />}
                 sx={{ textTransform: 'none', color: '#172B4D',
-                      borderColor: '#dfe1e6',
-                      '&:hover': {
-                        borderColor: '#c1c7d0',
-                        backgroundColor: '#f4f5f7',
-                      } 
-                    }}
+                  borderColor: '#dfe1e6',
+                  '&:hover': {
+                    borderColor: '#c1c7d0',
+                    backgroundColor: '#f4f5f7'
+                  }
+                }}
               >
                 Google
               </Button>

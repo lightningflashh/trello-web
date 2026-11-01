@@ -109,18 +109,18 @@ function Boards() {
     return <PageLoadingSpinner caption="Loading Boards..." />
   }
 
-return (
+  return (
     <Container disableGutters maxWidth={false} sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       {/* 1. AppBar cố định đỉnh trang, không bao giờ bị đè khi scroll */}
-      <Box 
-        sx={{ 
-          position: 'sticky', 
-          top: 0, 
-          zIndex: 1100, 
+      <Box
+        sx={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 1100,
           bgcolor: 'background.paper',
-          boxShadow: (theme) => 
-            theme.palette.mode === 'dark' 
-              ? '0 2px 8px rgba(0,0,0,0.5)' 
+          boxShadow: (theme) =>
+            theme.palette.mode === 'dark'
+              ? '0 2px 8px rgba(0,0,0,0.5)'
               : '0 2px 8px rgba(0,0,0,0.06)'
         }}
       >
@@ -311,7 +311,7 @@ return (
                             }
                           }}
                         >
-                          Go to board 
+                          Go to board
                           <ArrowRightIcon fontSize="small" sx={{ transition: 'transform 0.2s ease', ml: 0.3 }} />
                         </Box>
                       </CardContent>
