@@ -141,3 +141,10 @@ export const getCardAttachmentsAPI = async (cardId) => {
   )
   return response.data
 }
+
+export const fetchCurrentUserAPI = async () => {
+  const response = await authorizedAxiosInstance.get(
+    `${API_ROOT}/v1/users/current`
+  )
+  return response.data
+}

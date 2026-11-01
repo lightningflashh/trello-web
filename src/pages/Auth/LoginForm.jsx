@@ -36,6 +36,12 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { useState } from 'react'
 
+import { API_ROOT } from '~/utils/constants.js'
+
+// import { fetchCurrentUserAPI } from '~/apis/index.js'
+// import { updateUserAPI, setIsLoading } from '~/redux/user/userSlice.js'
+// import { useEffect } from 'react'
+
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm()
   const dispatch = useDispatch()
@@ -65,6 +71,11 @@ const LoginForm = () => {
         navigate('/')
       }
     })
+  }
+
+  const handleGoogleLogin = () => {
+    toast.info('Redirecting to Google login...')
+    window.location.href = `${API_ROOT}/v1/users/auth/google`
   }
 
   return (
@@ -220,6 +231,7 @@ const LoginForm = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, marginTop: '0.5em' }}>
               <Button
                 variant="outlined"
+                onClick={handleGoogleLogin}
                 size="large"
                 fullWidth
                 startIcon={<img src={googleIcon} alt="Google" style={{ width: '20px', height: '20px' }} />}
