@@ -1,66 +1,75 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { toast } from 'react-toastify'
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
-import authorizedAxiosInstance from '~/utils/authorizeAxios'
-import { API_ROOT } from '~/utils/constants'
+import authorizedAxiosInstance from "~/utils/authorizeAxios";
+import { API_ROOT } from "~/utils/constants";
 
 const initialState = {
-  currentUser: null
-}
+  currentUser: null,
+};
 
 export const loginUserAPI = createAsyncThunk(
-  'user/loginUserAPI',
+  "user/loginUserAPI",
   async (credentials) => {
-    const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/users/login`, credentials)
+    const response = await authorizedAxiosInstance.post(
+      `${API_ROOT}/v1/users/login`,
+      credentials,
+    );
     // response.data sẽ là dữ liệu trả về từ API
-    return response.data
-  }
-)
+    return response.data;
+  },
+);
 
 export const logoutUserAPI = createAsyncThunk(
-  'user/logoutUserAPI',
+  "user/logoutUserAPI",
   async (showSuccessMessage = true) => {
-    const response = await authorizedAxiosInstance.delete(`${API_ROOT}/v1/users/logout`)
+    const response = await authorizedAxiosInstance.delete(
+      `${API_ROOT}/v1/users/logout`,
+    );
     if (showSuccessMessage) {
-      toast.success('Logout successful')
+      toast.success("Logout successful");
     }
-    return response.data
-  }
-)
+    return response.data;
+  },
+);
 
 export const updateUserAPI = createAsyncThunk(
-  'user/updateUserAPI',
+  "user/updateUserAPI",
   async (userData) => {
-    const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/users/update`, userData)
-    return response.data
-  }
-)
+    const response = await authorizedAxiosInstance.put(
+      `${API_ROOT}/v1/users/update`,
+      userData,
+    );
+    return response.data;
+  },
+);
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentUser: (state, action) => {
+      state.currentUser = action.payload;
+    },
+  },
   extraReducers: (builder) => {
-    builder
-      .addCase(loginUserAPI.fulfilled, (state, action) => {
-        state.currentUser = action.payload
-      })
-    builder
-      .addCase(logoutUserAPI.fulfilled, (state) => {
-        // Xóa thông tin người dùng hiện tại khi đăng xuất
-        // Kết hợp Protected Route => Điều hướng về trang đăng nhập
-        state.currentUser = null
-      })
-    builder
-      .addCase(updateUserAPI.fulfilled, (state, action) => {
-        // Cập nhật thông tin người dùng hiện tại
-        state.currentUser = action.payload
-      })
-  }
-})
+    builder.addCase(loginUserAPI.fulfilled, (state, action) => {
+      state.currentUser = action.payload;
+    });
+    builder.addCase(logoutUserAPI.fulfilled, (state) => {
+      // Xóa thông tin người dùng hiện tại khi đăng xuất
+      // Kết hợp Protected Route => Điều hướng về trang đăng nhập
+      state.currentUser = null;
+    });
+    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
+      // Cập nhật thông tin người dùng hiện tại
+      state.currentUser = action.payload;
+    });
+  },
+});
 
-// export const {} = userSlice.actions
+export const { setCurrentUser } = userSlice.actions;
 
-export const selectCurrentUser = (state) => state.user.currentUser
+export const selectCurrentUser = (state) => state.user.currentUser;
 
-export const userReducer = userSlice.reducer
+export const userReducer = userSlice.reducer;
