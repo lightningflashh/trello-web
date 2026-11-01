@@ -12,7 +12,18 @@ import AttachmentIcon from '@mui/icons-material/Attachment'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
+import { useDispatch } from 'react-redux'
+import { updateCurrentActiveCard, showModalActiveCard } from '~/redux/activeCard/activeCardSlice'
+
 const Card = ({ card }) => {
+  const dispatch = useDispatch()
+
+  const handleCardClick = () => {
+    // Dispatch action to update the current active card in Redux
+    dispatch(updateCurrentActiveCard(card))
+    // Show the modal for the active card
+    dispatch(showModalActiveCard())
+  }
   const shouldCardActions = () => {
     return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
@@ -22,22 +33,23 @@ const Card = ({ card }) => {
     data: { ...card }
   })
 
-  const dndKitCardStyles = {
-    touchAction: 'none',
-    transform: CSS.Translate.toString(transform),
-    transition,
-    'opacity': isDragging ? 0.5 : undefined,
-    border: isDragging ? '1px solid #2ecc71' : 'none'
-  }
-
   return (
     <MuiCard
-      ref={setNodeRef} style={dndKitCardStyles} {...attributes} {...listeners}
+      onClick={handleCardClick}
+      ref={setNodeRef} {...attributes} {...listeners}
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
+        border: isDragging ? '1px solid #2ecc71' : '0px solid transparent',
+        opacity: isDragging ? 0.5 : 1,
+        touchAction: 'none',
+        transform: transform ? `${CSS.Translate.toString(transform)}` : 'none',
+        transition,
         overflow: card?.FE_PlaceholderCard ? 'hidden' : 'unset',
-        height: card?.FE_PlaceholderCard ? '0px' : 'unset'
+        height: card?.FE_PlaceholderCard ? '0px' : 'unset',
+        '&:hover': {
+          borderColor: (theme) => theme.palette.primary.main
+        }
       }}>
       {card?.cover && (<CardMedia sx={{ height: 140 }} image={card?.cover}/>)}
 
