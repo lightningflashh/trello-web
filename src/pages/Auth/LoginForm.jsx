@@ -77,7 +77,7 @@ const LoginForm = () => {
     toast.info('Redirecting to Google login...')
     window.location.href = `${API_ROOT}/v1/users/auth/google`
   }
- 
+
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>

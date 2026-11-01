@@ -100,7 +100,7 @@ export default App
 //         <Route path='/settings/account' element={<Settings />} />
 //         <Route path='/settings/security' element={<Settings />} />
 //       </Route>
-      
+
 //       <Route
 //         path='/login'
 //         element={

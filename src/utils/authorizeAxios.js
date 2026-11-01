@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from 'axios'
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify'
 
-import { interceptorLoadingElements } from "~/utils/formatters";
+import { interceptorLoadingElements } from '~/utils/formatters'
 
-import { refreshTokenAPI } from "~/apis";
-import { logoutUserAPI } from "~/redux/user/userSlice";
+import { refreshTokenAPI } from '~/apis'
+import { logoutUserAPI } from '~/redux/user/userSlice'
 
 /**
  * Không thể import { store } from '~/redux/store' theo cách thông thường ở đây
@@ -17,17 +17,17 @@ import { logoutUserAPI } from "~/redux/user/userSlice";
  * https://redux.js.org/faq/code-structure#how-can-i-use-the-redux-store-in-non-component-files
  */
 
-let axiosReduxStore;
+let axiosReduxStore
 export const injectStore = (mainStore) => {
-  axiosReduxStore = mainStore;
-};
+  axiosReduxStore = mainStore
+}
 
-let authorizedAxiosInstance = axios.create();
+let authorizedAxiosInstance = axios.create()
 
-authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10;
+authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10
 
 // Sẽ cho phép axios gửi cookie trong request lên server (lưu trữ token vào trong httpOnly cookie)
-authorizedAxiosInstance.defaults.withCredentials = true;
+authorizedAxiosInstance.defaults.withCredentials = true
 
 // authorizedAxiosInstance.interceptors.request.use((config) => {
 //   interceptorLoadingElements(true) // Bật loading cho tất cả các request tránh double click
@@ -39,68 +39,68 @@ authorizedAxiosInstance.defaults.withCredentials = true;
 
 authorizedAxiosInstance.interceptors.request.use(
   (config) => {
-    interceptorLoadingElements(true); // Bật loading cho tất cả các request
+    interceptorLoadingElements(true) // Bật loading cho tất cả các request
 
     // QUAN TRỌNG: Nếu dữ liệu gửi lên là FormData (upload file/avatar/attachment),
     // ta phải xóa trắng hoặc không để Content-Type bị gán đè,
     // để trình duyệt tự động thêm multipart/form-data kèm boundary của nó.
     if (config.data instanceof FormData) {
-      delete config.headers["Content-Type"];
+      delete config.headers['Content-Type']
     }
 
-    return config;
+    return config
   },
   (error) => {
-    return Promise.reject(error);
-  },
-);
+    return Promise.reject(error)
+  }
+)
 
 /* * Khởi tạo một cái promise cho việc gọi api refresh_token
  * Mục đích tạo promise này là để khi gọi api refresh_token rồi mới retry lại nhiều api bị lỗi trước đó
  */
 let refreshTokenPromise = authorizedAxiosInstance.interceptors.response.use(
   (response) => {
-    interceptorLoadingElements(false); // Tắt loading khi có response trả về
-    return response;
+    interceptorLoadingElements(false) // Tắt loading khi có response trả về
+    return response
   },
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
 
-    interceptorLoadingElements(false); // Tắt loading khi có lỗi xảy ra
+    interceptorLoadingElements(false) // Tắt loading khi có lỗi xảy ra
 
     /**Quan trọng: Xử lý Refresh Token tự động */
 
     // Trường hợp 1: Nếu như nhận mã 401 từ BE, thì gọi API đăng xuất luôn
     if (error?.response?.status === 401) {
-      axiosReduxStore.dispatch(logoutUserAPI(false));
+      axiosReduxStore.dispatch(logoutUserAPI(false))
     }
 
     // Trường hợp 2: Nếu như nhận mã 410 từ BE, thì sẽ gọi API refresh token để làm mới lại accessToken
     // Đầu tiên lấy được các request API đang bị lỗi thông qua error.config
-    const originalRequests = error.config;
+    const originalRequests = error.config
     if (error?.response?.status === 410 && !originalRequests._retry) {
       // Đánh dấu request này đã được retry lại, gọi 1 lần tại 1 thời điểm
       // do có cái return promise ở dưới bỏ cái này đi //!originalRequests._retry
-      originalRequests._retry = true;
+      originalRequests._retry = true
 
       // Nếu như chưa có promise nào đang chạy thì mới gọi API refresh token
       if (!refreshTokenPromise) {
         refreshTokenPromise = refreshTokenAPI()
           .then((data) => {
             // đồng thời accessToken đã nằm trong cookie httpOnly (xử lý ở BE)
-            return data?.accessToken;
+            return data?.accessToken
           })
           .catch((err) => {
             // Nếu có lỗi thì logout luôn
-            axiosReduxStore.dispatch(logoutUserAPI(false));
+            axiosReduxStore.dispatch(logoutUserAPI(false))
             // Trả về một promise reject để không retry lại các request trước đó
             // return Promise.reject(err)
           })
           .finally(() => {
             //Dù API refresh token thành công hay thất bại thì cũng sẽ reset lại promise
-            refreshTokenPromise = null;
-          });
+            refreshTokenPromise = null
+          })
       }
 
       // Cần return trường hợp refreshTokenPromise chạy thành công và xử lý thêm ở đây:
@@ -114,20 +114,20 @@ let refreshTokenPromise = authorizedAxiosInstance.interceptors.response.use(
          */
 
         // Bước 2: Bước Quan trọng: Return lại axios instance của chúng ta kết hợp các originalRequests để gọi lại những API ban đầu bị lỗi
-        return authorizedAxiosInstance(originalRequests);
-      });
+        return authorizedAxiosInstance(originalRequests)
+      })
     }
 
-    let errorMessage = error?.message;
+    let errorMessage = error?.message
     if (error?.response?.data?.message) {
-      errorMessage = error.response?.data?.message;
+      errorMessage = error.response?.data?.message
     }
     // Nếu lỗi là do access token hết hạn thì sẽ không hiển thị thông báo lỗi
     if (error.response?.status !== 410) {
-      toast.error(errorMessage);
+      toast.error(errorMessage)
     }
-    return Promise.reject(error);
-  },
-);
+    return Promise.reject(error)
+  }
+)
 
-export default authorizedAxiosInstance;
+export default authorizedAxiosInstance
