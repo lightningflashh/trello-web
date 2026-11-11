@@ -2,7 +2,7 @@ let apiRoot = ''
 if (process.env.BUILD_MODE === 'dev') {
   apiRoot = 'http://localhost:8017'
 } else {
-  apiRoot = import.meta.env.API_ROOT
+  apiRoot = import.meta.env.VITE_API_TRELLO_ROOT
 }
 export const API_ROOT = apiRoot
 
