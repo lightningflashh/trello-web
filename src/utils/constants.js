@@ -2,7 +2,7 @@ let apiRoot = ''
 if (process.env.BUILD_MODE === 'dev') {
   apiRoot = 'http://localhost:8017'
 } else {
-  apiRoot = 'https://trello-api-qbc8.onrender.com'
+  apiRoot = import.meta.env.API_ROOT
 }
 export const API_ROOT = apiRoot
 
